@@ -300,6 +300,7 @@ function buildExterior(B, mats, models) {
   // ground: road, site paving, neighbours' strips
   const site = EXTERIOR.site;
   B.add('site', 'asphalt', quad(-14, site.north - 9, W + 14, site.north, 0));
+  B.add('site', 'farGround', quad(-160, -170, 160, 150, -0.02));
   B.box('site', 'paving', -14, 0, site.north - 0.25, W + 14, 0.12, site.north);
   B.add('site', 'paving', quad(site.west, site.north, site.east, f2 + 0.0, 0.05));
   B.box('site', 'paving', site.west, 0, site.north, site.east, 0.05, site.south);

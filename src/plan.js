@@ -91,7 +91,7 @@ const first = {
     { type: 'model', id: 'potted_plant_02', at: [X(F1, 470), Z(F1, 1160)], scale: 0.8 },
     { type: 'model', id: 'standing_picture_frame_01', at: [X(F1, 455), Z(F1, 545)], y: 0.55, scale: 0.6, rot: Math.PI },
   ],
-  lights: [[X(F1, 390), Z(F1, 700)], [X(F1, 390), Z(F1, 1030)], [X(F1, 230), Z(F1, 720)], [X(F1, 250), Z(F1, 950)]],
+  lights: [[X(F1, 390), Z(F1, 700)], [X(F1, 390), Z(F1, 1030)], [X(F1, 240), Z(F1, 800)]],
   views: [
     { name: '玄関・ホール', eye: [X(F1, 240), Z(F1, 700)], look: [X(F1, 240), Z(F1, 950)] },
     { name: 'サービスルーム5.1帖', eye: [X(F1, 330), Z(F1, 840)], look: [X(F1, 430), Z(F1, 620)] },
@@ -166,9 +166,9 @@ const second = {
     { type: 'pendant', at: [X(F2, 975), Z(F2, 600)], model: 'modern_ceiling_lamp_01' },
     { type: 'model', id: 'potted_plant_02', at: [X(F2, 892), Z(F2, 990)], scale: 0.7 },
   ],
-  lights: [[X(F2, 900), Z(F2, 300)], [X(F2, 1000), Z(F2, 300)], [X(F2, 900), Z(F2, 470)], [X(F2, 975), Z(F2, 600)], [X(F2, 1030), Z(F2, 800)], [X(F2, 900), Z(F2, 870)], [X(F2, 1040), Z(F2, 1050)], [X(F2, 880), Z(F2, 1105)]],
+  lights: [[X(F2, 950), Z(F2, 330)], [X(F2, 975), Z(F2, 600)], [X(F2, 1030), Z(F2, 820)], [X(F2, 1040), Z(F2, 1050)]],
   views: [
-    { name: 'LDK入口', eye: [X(F2, 900), Z(F2, 790)], look: [X(F2, 950), Z(F2, 300)] },
+    { name: 'LDK入口', eye: [X(F2, 905), Z(F2, 765)], look: [X(F2, 1010), Z(F2, 300)] },
     { name: 'リビング', eye: [X(F2, 1050), Z(F2, 250)], look: [X(F2, 900), Z(F2, 700)] },
     { name: 'ダイニング', eye: [X(F2, 880), Z(F2, 520)], look: [X(F2, 1060), Z(F2, 720)] },
     { name: 'キッチン', eye: [X(F2, 1025), Z(F2, 800)], look: [X(F2, 950), Z(F2, 350)] },
@@ -243,7 +243,7 @@ const third = {
     { type: 'chair', at: [X(F3, 1490), Z(F3, 905)], rot: Math.PI },
     { type: 'model', id: 'standing_picture_frame_01', at: [X(F3, 1405), Z(F3, 530)], y: 0.55, scale: 0.6, rot: Math.PI / 2 },
   ],
-  lights: [[X(F3, 1480), Z(F3, 420)], [X(F3, 1430), Z(F3, 700)], [X(F3, 1530), Z(F3, 960)], [X(F3, 1560), Z(F3, 620)]],
+  lights: [[X(F3, 1480), Z(F3, 420)], [X(F3, 1430), Z(F3, 700)], [X(F3, 1530), Z(F3, 960)]],
   views: [
     { name: 'ホール', eye: [X(F3, 1500), Z(F3, 720)], look: [X(F3, 1420), Z(F3, 600)] },
     { name: '主寝室7.2帖', eye: [X(F3, 1420), Z(F3, 600)], look: [X(F3, 1550), Z(F3, 300)] },

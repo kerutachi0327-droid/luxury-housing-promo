@@ -28,6 +28,7 @@ const lowPower = QUERY.get('q') === 'low' || (QUERY.get('q') !== 'high' && (isTo
 // ------------------------------------------------------------------ renderer
 let renderer, composer, gtao, scene, camera, house, mats, nav, lights = [], skyTex = null, roomEnv = null, skyEnv = null, sun, hemi;
 let pixelRatio = Math.min(devicePixelRatio, lowPower ? 1.5 : 2);
+const MIN_PR = Math.min(devicePixelRatio, lowPower ? 0.85 : 1);
 
 function initRenderer() {
   renderer = new THREE.WebGLRenderer({ canvas: ui.canvas, antialias: false, powerPreference: 'high-performance' });
@@ -111,7 +112,7 @@ async function start3D() {
   house = built.root; nav = built.nav;
   scene.add(house);
   if (!lowPower) for (const l of built.lightRig) {
-    const p = new THREE.PointLight(0xfff0dc, 2.2, 5.5, 2);
+    const p = new THREE.PointLight(0xfff0dc, 3.4, 6.5, 2);
     p.position.copy(l.pos); p.userData.floor = l.floor; scene.add(p); lights.push(p);
   }
   buildMarkers();
@@ -142,7 +143,7 @@ function applyVisibility() {
     } else if (part === 'caps') v = false;
     o.visible = v;
   });
-  for (const p of lights) p.intensity = (m === 'walk' || m === 'dollhouse' || m === 'plan') ? (p.userData.floor === state.floor || m === 'walk' ? 2.2 : 0) : 1.4;
+  for (const p of lights) p.intensity = (m === 'walk' || m === 'dollhouse' || m === 'plan') ? (p.userData.floor === state.floor || m === 'walk' ? 3.4 : 0) : 2;
   const outdoor = m === 'exterior';
   scene.environment = outdoor && skyEnv ? skyEnv : roomEnv;
   scene.environmentIntensity = outdoor ? 0.9 : (lowPower ? 1.15 : 0.85);
@@ -606,9 +607,11 @@ function frame(t) {
   updateLabels();
   composer.render();
   // adaptive resolution
-  if (dt > 1 / 35) slowFrames++; else if (dt < 1 / 55) fastFrames++;
-  if (slowFrames > 40 && pixelRatio > 0.75) { pixelRatio = Math.max(0.75, pixelRatio - 0.25); slowFrames = 0; resize(); if (gtao && pixelRatio <= 1) gtao.enabled = false; }
-  if (fastFrames > 300) { fastFrames = 0; slowFrames = 0; }
+  // (browsers in energy-saver mode cap at 30 fps, so only react to real stalls)
+  if (dt > 1 / 22) slowFrames++; else fastFrames++;
+  if (slowFrames > 45 && pixelRatio > MIN_PR) { pixelRatio = Math.max(MIN_PR, pixelRatio - 0.25); slowFrames = 0; fastFrames = 0; resize(); }
+  else if (slowFrames > 45 && gtao?.enabled) { gtao.enabled = false; slowFrames = 0; }
+  if (fastFrames > 240) { fastFrames = 0; slowFrames = 0; }
   requestAnimationFrame(frame);
 }
 function desiredCamLive(to) { return to; }

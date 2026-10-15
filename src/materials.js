@@ -58,7 +58,7 @@ export function materials() {
   if (M) return M;
   M = {
     floorWood: textured('laminate_floor_02', { color: 0xf2ece4, roughness: 0.9, normalScale: 0.8 }),
-    wall: textured('beige_wall_001', { diff: false, color: 0xeeebe5, roughness: 1, normalScale: 0.35, scale: 0.6 }),
+    wall: textured('beige_wall_001', { diff: false, color: 0xf1f0ed, roughness: 1, normalScale: 0.35, scale: 0.6 }),
     ceiling: textured('beige_wall_001', { diff: false, color: 0xf5f3ef, roughness: 1, normalScale: 0.25 }),
     tileGenkan: textured('large_grey_tiles', { color: 0xd8d6d2, normalScale: 0.8, scale: 0.6 }),
     tileBath: textured('anti_skid_tiles', { color: 0xe6e4e0, normalScale: 0.6, scale: 0.5 }),
@@ -67,7 +67,7 @@ export function materials() {
     cushionFloor: textured('marble_01', { color: 0xe9e6e1, roughness: 0.55, normalScale: 0.2, scale: 1.4 }),
     marble: textured('marble_01', { roughness: 0.35, normalScale: 0.3 }),
     counterDark: textured('painted_concrete_02', { diff: false, color: 0x2d2e30, roughness: 0.6, normalScale: 0.25 }),
-    oak: textured('oak_veneer_01', { color: 0xf3ece2, roughness: 0.75, normalScale: 0.5 }),
+    oak: textured('oak_veneer_01', { color: 0xead9c6, roughness: 0.75, normalScale: 0.5 }),
     walnut: textured('american_walnut_veneer', { roughness: 0.7, normalScale: 0.5 }),
     door: textured('grey_oak_veneer_02', { color: 0xf6f1ea, roughness: 0.65, normalScale: 0.35, rot: Math.PI / 2 }),
     doorV: textured('grey_oak_veneer_02', { color: 0xf6f1ea, roughness: 0.65, normalScale: 0.35 }),
@@ -109,6 +109,7 @@ export function materials() {
     neighbour: textured('concrete_wall_008', { diff: false, color: 0xe2dfd9, roughness: 0.95, normalScale: 0.4 }),
     neighbourWin: plain(0x8e9ba2, 0.08, 0.4, { envMapIntensity: 1.3 }),
     ground: textured('large_floor_tiles_02', { color: 0xc9c5be, normalScale: 0.5 }),
+    farGround: plain(0x8f8e8a, 0.95),
     hedge: plain(0x5d7350, 0.9),
   };
   return M;
