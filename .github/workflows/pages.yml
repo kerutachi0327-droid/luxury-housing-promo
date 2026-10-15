@@ -39,6 +39,8 @@ jobs:
           cp assets/*.png _site/assets/ 2>/dev/null || true
           if [ -d assets/lib ]; then cp -r assets/lib _site/assets/lib; fi
           if [ -f CREDITS.md ]; then cp CREDITS.md _site/; fi
+          # cache-bust the bundle and stylesheet per commit
+          sed -i "s#dist/app.js#dist/app.js?v=${GITHUB_SHA::8}#; s#style.css#style.css?v=${GITHUB_SHA::8}#" _site/index.html
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v4
         with:
