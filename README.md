@@ -3,7 +3,7 @@
 高円寺 TYPE02 の住まい体験サイト（GitHub Pages で公開）。
 
 - 3D表示は公式間取り図をトレースした `src/plan.js` から生成します（1px = 11.6mm）。
-- `npm run check` で各部屋の面積を図面の帖数と照合します（CIで自動実行、許容±8%）。
+- `npm run check` で各部屋の面積を図面の帖数と照合します（CIで自動実行、許容±6%）。
 - 質感素材は Poly Haven の CC0 素材のみ。`tools/assets.json` に一覧、取得は Actions の「Vendor 3D assets」を手動実行（`assets/lib` にコミット）。出典は `CREDITS.md`。
 - `main` への push で `npm run build`（esbuild）→ Pages へデプロイします。
 
