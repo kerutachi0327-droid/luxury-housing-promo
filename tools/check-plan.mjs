@@ -3,7 +3,7 @@
 // or when floors do not stack (3F must sit on 2F, stairs must line up).
 import { FLOORS, JO, roomArea, SCALE, EXTERIOR } from '../src/plan.js';
 
-const TOL = 0.08;
+const TOL = 0.06;
 let failed = false;
 const rows = [];
 for (const f of FLOORS) {
