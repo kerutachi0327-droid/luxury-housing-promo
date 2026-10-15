@@ -1,0 +1,674 @@
+{
+ "generated": "2026-10-15T10:41:56.007Z",
+ "license": "CC0-1.0",
+ "source": "https://polyhaven.com",
+ "textures": {
+  "laminate_floor_02": {
+   "name": "Laminate Floor 02",
+   "size": [
+    1.7,
+    1.7
+   ],
+   "authors": [
+    "Dario Barresi",
+    "Charlotte Baglioni"
+   ],
+   "maps": {
+    "diff": {
+     "file": "tex/laminate_floor_02_diff.webp",
+     "bytes": 145440,
+     "sha256": "3acda4291faffae7c2fdfe4778c66ca450210cc3d95a58968d416ef38cfe7fb4",
+     "from": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/laminate_floor_02/laminate_floor_02_diff_1k.jpg"
+    },
+    "nor": {
+     "file": "tex/laminate_floor_02_nor.webp",
+     "bytes": 82778,
+     "sha256": "bc266c6baaf6e33502b24d2542b6630a461dfe1ee25a7b493555dcbbc84aec96",
+     "from": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/laminate_floor_02/laminate_floor_02_nor_gl_1k.jpg"
+    },
+    "arm": {
+     "file": "tex/laminate_floor_02_arm.webp",
+     "bytes": 115670,
+     "sha256": "c448c08fc049b8308496cfb23cf698d7d704e6076d11517f1a0b979282240f62",
+     "from": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/laminate_floor_02/laminate_floor_02_arm_1k.jpg"
+    }
+   },
+   "use": "床フローリング",
+   "page": "https://polyhaven.com/a/laminate_floor_02"
+  },
+  "beige_wall_001": {
+   "name": "Beige Wall 001",
+   "size": [
+    3,
+    3
+   ],
+   "authors": [
+    "Dimitrios Savva",
+    "Rico Cilliers"
+   ],
+   "maps": {
+    "nor": {
+     "file": "tex/beige_wall_001_nor.webp",
+     "bytes": 147738,
+     "sha256": "3c22143cfcfc1f30ca322f8eef3217f5427633630af4769d58152409152512b5",
+     "from": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/beige_wall_001/beige_wall_001_nor_gl_1k.jpg"
+    },
+    "arm": {
+     "file": "tex/beige_wall_001_arm.webp",
+     "bytes": 44524,
+     "sha256": "7f3afc089b870e18201c3ce96f13e71c3fd627f19ba0307f9d233ade9f5b1aa5",
+     "from": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/beige_wall_001/beige_wall_001_arm_1k.jpg"
+    }
+   },
+   "use": "壁・天井クロスの凹凸",
+   "page": "https://polyhaven.com/a/beige_wall_001"
+  },
+  "large_grey_tiles": {
+   "name": "Large Grey Tiles",
+   "size": [
+    3,
+    3
+   ],
+   "authors": [
+    "Rob Tuytel"
+   ],
+   "maps": {
+    "diff": {
+     "file": "tex/large_grey_tiles_diff.webp",
+     "bytes": 136694,
+     "sha256": "166074e692d834b9be262a9bef8352b12756fd54d665ed0703340322f5875483",
+     "from": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/large_grey_tiles/large_grey_tiles_diff_1k.jpg"
+    },
+    "nor": {
+     "file": "tex/large_grey_tiles_nor.webp",
+     "bytes": 124926,
+     "sha256": "4eb6e01a72b9dc186f61a1c261979c2ac47f811e0fced197cd3b42c29e862f24",
+     "from": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/large_grey_tiles/large_grey_tiles_nor_gl_1k.jpg"
+    },
+    "arm": {
+     "file": "tex/large_grey_tiles_arm.webp",
+     "bytes": 173408,
+     "sha256": "35de3fd83c72e3f823aa084c2bec4a8a1ee8f7458891ff5163a150fba44342c8",
+     "from": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/large_grey_tiles/large_grey_tiles_arm_1k.jpg"
+    }
+   },
+   "use": "玄関・ポーチのタイル",
+   "page": "https://polyhaven.com/a/large_grey_tiles"
+  },
+  "anti_skid_tiles": {
+   "name": "Anti Skid Tiles",
+   "size": [
+    1.8,
+    1.8
+   ],
+   "authors": [
+    "Amal Kumar"
+   ],
+   "maps": {
+    "diff": {
+     "file": "tex/anti_skid_tiles_diff.webp",
+     "bytes": 31838,
+     "sha256": "47d9475479dae7e62198e5b7cbc8d5bca13bf42f8cd51006885998be0180f1f2",
+     "from": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/anti_skid_tiles/anti_skid_tiles_diff_1k.jpg"
+    },
+    "nor": {
+     "file": "tex/anti_skid_tiles_nor.webp",
+     "bytes": 121566,
+     "sha256": "eb0f7e0c9075cf61713246b763a1c68195b7ff4299b28bd0f6d39ced9967fcbe",
+     "from": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/anti_skid_tiles/anti_skid_tiles_nor_gl_1k.jpg"
+    },
+    "arm": {
+     "file": "tex/anti_skid_tiles_arm.webp",
+     "bytes": 193402,
+     "sha256": "63074015232d1f37f679535636073a2c177604050edcc3fcc6718fdbad07f51e",
+     "from": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/anti_skid_tiles/anti_skid_tiles_arm_1k.jpg"
+    }
+   },
+   "use": "浴室床",
+   "page": "https://polyhaven.com/a/anti_skid_tiles"
+  },
+  "long_white_tiles": {
+   "name": "Long White Tiles",
+   "size": [
+    1.27,
+    1.27
+   ],
+   "authors": [
+    "Jenelle van Heerden",
+    "Sergej Majboroda"
+   ],
+   "maps": {
+    "diff": {
+     "file": "tex/long_white_tiles_diff.webp",
+     "bytes": 73132,
+     "sha256": "a3766c5ac8f3d34f6a946f244ca3ed0a184f904ae0301d58dab1a5d3b54b3b54",
+     "from": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/long_white_tiles/long_white_tiles_diff_1k.jpg"
+    },
+    "nor": {
+     "file": "tex/long_white_tiles_nor.webp",
+     "bytes": 133758,
+     "sha256": "ace82f78c7c4610da4a3143614f7ee3cb2501a85d0176d6895a8eceff80780b1",
+     "from": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/long_white_tiles/long_white_tiles_nor_gl_1k.jpg"
+    },
+    "arm": {
+     "file": "tex/long_white_tiles_arm.webp",
+     "bytes": 89888,
+     "sha256": "8e6b72c5fdc60464fdbc5f7f00681fd6e796aa729d85da1dcb6a5b40b1a55377",
+     "from": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/long_white_tiles/long_white_tiles_arm_1k.jpg"
+    }
+   },
+   "use": "浴室壁・キッチンパネル",
+   "page": "https://polyhaven.com/a/long_white_tiles"
+  },
+  "marble_01": {
+   "name": "Marble 01",
+   "size": [
+    1.5,
+    1.5
+   ],
+   "authors": [
+    "Rob Tuytel"
+   ],
+   "maps": {
+    "diff": {
+     "file": "tex/marble_01_diff.webp",
+     "bytes": 58852,
+     "sha256": "94e9873676b447c97094ff1dd8f82ce53cb9e67f47d504a4144cdb625550f37c",
+     "from": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/marble_01/marble_01_diff_1k.jpg"
+    },
+    "nor": {
+     "file": "tex/marble_01_nor.webp",
+     "bytes": 10818,
+     "sha256": "6a0b0a51714625dfc731f266e4d8361992fecf9f7a5331f147f05cace35199ba",
+     "from": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/marble_01/marble_01_nor_gl_1k.jpg"
+    },
+    "arm": {
+     "file": "tex/marble_01_arm.webp",
+     "bytes": 30754,
+     "sha256": "ac6314d03c082b651b5da67aaf17f423c6b4a6c38b589835c636e087a46d1a79",
+     "from": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/marble_01/marble_01_arm_1k.jpg"
+    }
+   },
+   "use": "洗面カウンター",
+   "page": "https://polyhaven.com/a/marble_01"
+  },
+  "painted_concrete_02": {
+   "name": "Painted Concrete 02",
+   "size": [
+    4,
+    4
+   ],
+   "authors": [
+    "Rob Tuytel"
+   ],
+   "maps": {
+    "nor": {
+     "file": "tex/painted_concrete_02_nor.webp",
+     "bytes": 174566,
+     "sha256": "4b57a36fdcd78daeeeffed4d2a72ce7a76ecebca31189b667db1f2d991efa41f",
+     "from": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/painted_concrete_02/painted_concrete_02_nor_gl_1k.jpg"
+    },
+    "arm": {
+     "file": "tex/painted_concrete_02_arm.webp",
+     "bytes": 127634,
+     "sha256": "1739610c411efff4ac091f5416ee5b899113abc2c0356818bc7ab4ed1ebe5fac",
+     "from": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/painted_concrete_02/painted_concrete_02_arm_1k.jpg"
+    }
+   },
+   "use": "キッチン天板（濃色）",
+   "page": "https://polyhaven.com/a/painted_concrete_02"
+  },
+  "oak_veneer_01": {
+   "name": "Oak Veneer 01",
+   "size": [
+    1.83,
+    1.83
+   ],
+   "authors": [
+    "Jenelle van Heerden"
+   ],
+   "maps": {
+    "diff": {
+     "file": "tex/oak_veneer_01_diff.webp",
+     "bytes": 94020,
+     "sha256": "fe392d1497af2c7ca4a346681cc8a9c9184e0163fe3fe19eab4969c3b5176ecc",
+     "from": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/oak_veneer_01/oak_veneer_01_diff_1k.jpg"
+    },
+    "nor": {
+     "file": "tex/oak_veneer_01_nor.webp",
+     "bytes": 58840,
+     "sha256": "257fd1719b03dcc6647749a0e2bd81001747507277152dabd508d387b0b57537",
+     "from": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/oak_veneer_01/oak_veneer_01_nor_gl_1k.jpg"
+    },
+    "arm": {
+     "file": "tex/oak_veneer_01_arm.webp",
+     "bytes": 338440,
+     "sha256": "edf9594c7c5a55b5cabe7a489cd5fb771b5a2c6a35be692ea3a901a48533661f",
+     "from": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/oak_veneer_01/oak_veneer_01_arm_1k.jpg"
+    }
+   },
+   "use": "家具・カウンター",
+   "page": "https://polyhaven.com/a/oak_veneer_01"
+  },
+  "american_walnut_veneer": {
+   "name": "American Walnut Veneer",
+   "size": [
+    1,
+    1
+   ],
+   "authors": [
+    "Jenelle van Heerden"
+   ],
+   "maps": {
+    "diff": {
+     "file": "tex/american_walnut_veneer_diff.webp",
+     "bytes": 80736,
+     "sha256": "579f6f3597a1ac5c236880d9e608691de721bac60ba822db6ad8b8e9aeb81fb4",
+     "from": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/american_walnut_veneer/american_walnut_veneer_diff_1k.jpg"
+    },
+    "nor": {
+     "file": "tex/american_walnut_veneer_nor.webp",
+     "bytes": 31256,
+     "sha256": "ba692c451e6709960fa4ffa6617ef348d5fb0b07659e9239ed97972f66581a55",
+     "from": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/american_walnut_veneer/american_walnut_veneer_nor_gl_1k.jpg"
+    },
+    "arm": {
+     "file": "tex/american_walnut_veneer_arm.webp",
+     "bytes": 162402,
+     "sha256": "1ba2c843b04ac6e055442a28bdaaba0c2a93b33b4a1e3af9eb1e7f6d099692e9",
+     "from": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/american_walnut_veneer/american_walnut_veneer_arm_1k.jpg"
+    }
+   },
+   "use": "建具アクセント",
+   "page": "https://polyhaven.com/a/american_walnut_veneer"
+  },
+  "grey_oak_veneer_02": {
+   "name": "Grey Oak Veneer 02",
+   "size": [
+    1,
+    1
+   ],
+   "authors": [
+    "Jenelle van Heerden"
+   ],
+   "maps": {
+    "diff": {
+     "file": "tex/grey_oak_veneer_02_diff.webp",
+     "bytes": 82192,
+     "sha256": "a17df76384b81fa9ba29c3a1dc75e15d1a20ebc0ca4d2b6dcc941b1e8df1b7ca",
+     "from": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/grey_oak_veneer_02/grey_oak_veneer_02_diff_1k.jpg"
+    },
+    "nor": {
+     "file": "tex/grey_oak_veneer_02_nor.webp",
+     "bytes": 45320,
+     "sha256": "eb92778e9c7468f5110af6e0db2ba345924112b97be63b3abc5f473bf21c75a8",
+     "from": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/grey_oak_veneer_02/grey_oak_veneer_02_nor_gl_1k.jpg"
+    },
+    "arm": {
+     "file": "tex/grey_oak_veneer_02_arm.webp",
+     "bytes": 67792,
+     "sha256": "05ee52bbbe2b26a40de6b1a8435c3139fffe51ef870f2b5767583b1eedfdb243",
+     "from": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/grey_oak_veneer_02/grey_oak_veneer_02_arm_1k.jpg"
+    }
+   },
+   "use": "建具・収納扉",
+   "page": "https://polyhaven.com/a/grey_oak_veneer_02"
+  },
+  "denim_fabric_05": {
+   "name": "Denim Fabric 05",
+   "size": [
+    0.27,
+    0.271
+   ],
+   "authors": [
+    "colormass",
+    "Rico Cilliers"
+   ],
+   "maps": {
+    "nor": {
+     "file": "tex/denim_fabric_05_nor.webp",
+     "bytes": 415432,
+     "sha256": "b2778e7763bd6bff6e4846616316e7570c72e66e7ac5008d497a944803f58264",
+     "from": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/denim_fabric_05/denim_fabric_05_nor_gl_1k.jpg"
+    },
+    "arm": {
+     "file": "tex/denim_fabric_05_arm.webp",
+     "bytes": 327900,
+     "sha256": "02db7fc4aaa03c036bd2d0937b0c60fb27402c6717f7b5c45ff54acf55755fcf",
+     "from": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/denim_fabric_05/denim_fabric_05_arm_1k.jpg"
+    }
+   },
+   "use": "ソファ生地",
+   "page": "https://polyhaven.com/a/denim_fabric_05"
+  },
+  "cotton_jersey": {
+   "name": "Cotton Jersey",
+   "size": [
+    0.264,
+    0.264
+   ],
+   "authors": [
+    "colormass",
+    "Rico Cilliers"
+   ],
+   "maps": {
+    "nor": {
+     "file": "tex/cotton_jersey_nor.webp",
+     "bytes": 160262,
+     "sha256": "bb53a9e33ce53fcf941223c9ddb6eee51744938276ba04e9d5cb379306be430f",
+     "from": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/cotton_jersey/cotton_jersey_nor_gl_1k.jpg"
+    },
+    "arm": {
+     "file": "tex/cotton_jersey_arm.webp",
+     "bytes": 353460,
+     "sha256": "54e07b3c6cd8ac20b6854fddfa1d7f99bb033bee41e3c0c6a141f89452561d33",
+     "from": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/cotton_jersey/cotton_jersey_arm_1k.jpg"
+    }
+   },
+   "use": "寝具",
+   "page": "https://polyhaven.com/a/cotton_jersey"
+  },
+  "leather_white": {
+   "name": "Leather White",
+   "size": [
+    0.3,
+    0.3
+   ],
+   "authors": [
+    "Rob Tuytel"
+   ],
+   "maps": {
+    "diff": {
+     "file": "tex/leather_white_diff.webp",
+     "bytes": 176898,
+     "sha256": "55dfdfca646ee2fcbac929e257b58533a1c4e2fa618024f1f6bba72e75a5b97d",
+     "from": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/leather_white/leather_white_diff_1k.jpg"
+    },
+    "nor": {
+     "file": "tex/leather_white_nor.webp",
+     "bytes": 157756,
+     "sha256": "c3d964c0db72d04325dc3eb7191a0e5d06bb62b62b9288f9caad74387597e647",
+     "from": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/leather_white/leather_white_nor_gl_1k.jpg"
+    },
+    "arm": {
+     "file": "tex/leather_white_arm.webp",
+     "bytes": 309694,
+     "sha256": "efeaeaa1756450ea37f5004d0fc38cd5d2632add26244a3114a10806f57c7e31",
+     "from": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/leather_white/leather_white_arm_1k.jpg"
+    }
+   },
+   "use": "ダイニングチェア",
+   "page": "https://polyhaven.com/a/leather_white"
+  },
+  "knitted_fleece": {
+   "name": "Knitted Fleece",
+   "size": [
+    0.266,
+    0.27
+   ],
+   "authors": [
+    "colormass",
+    "Rico Cilliers"
+   ],
+   "maps": {
+    "nor": {
+     "file": "tex/knitted_fleece_nor.webp",
+     "bytes": 467672,
+     "sha256": "1fb0fc02c95b4138d9ad3e83aa8d137ccaa10066a836667769cb1f46a01bf4b2",
+     "from": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/knitted_fleece/knitted_fleece_nor_gl_1k.jpg"
+    },
+    "arm": {
+     "file": "tex/knitted_fleece_arm.webp",
+     "bytes": 476942,
+     "sha256": "021302e2e12649f22136c23430746c35c662511040c86b41ae10e3befa26213e",
+     "from": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/knitted_fleece/knitted_fleece_arm_1k.jpg"
+    }
+   },
+   "use": "ラグ",
+   "page": "https://polyhaven.com/a/knitted_fleece"
+  },
+  "concrete_wall_008": {
+   "name": "Concrete Wall 008",
+   "size": [
+    2.71,
+    2.71
+   ],
+   "authors": [
+    "Dario Barresi",
+    "Charlotte Baglioni"
+   ],
+   "maps": {
+    "nor": {
+     "file": "tex/concrete_wall_008_nor.webp",
+     "bytes": 59264,
+     "sha256": "e3106e01f55f0255c6ec861ed499793adee6754632b3a9d6755c693dc404ba07",
+     "from": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/concrete_wall_008/concrete_wall_008_nor_gl_1k.jpg"
+    },
+    "arm": {
+     "file": "tex/concrete_wall_008_arm.webp",
+     "bytes": 120642,
+     "sha256": "5b7f31ad9ed5d9abf3cefa66f934004a7988058c6bc5a7da286a15ebbdaf63cc",
+     "from": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/concrete_wall_008/concrete_wall_008_arm_1k.jpg"
+    }
+   },
+   "use": "外壁（白）",
+   "page": "https://polyhaven.com/a/concrete_wall_008"
+  },
+  "exterior_wall_cladding": {
+   "name": "Exterior Wall Cladding",
+   "size": [
+    2,
+    2
+   ],
+   "authors": [
+    "Charlotte Baglioni"
+   ],
+   "maps": {
+    "diff": {
+     "file": "tex/exterior_wall_cladding_diff.webp",
+     "bytes": 36422,
+     "sha256": "1e0461f3c2b826520dedd894f34e6c811f21a622664c6d5c51afe5769f7c0511",
+     "from": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/exterior_wall_cladding/exterior_wall_cladding_diff_1k.jpg"
+    },
+    "nor": {
+     "file": "tex/exterior_wall_cladding_nor.webp",
+     "bytes": 256450,
+     "sha256": "4f4bf50bfa5de1a3f88ebe17bbf74279faf48b9b4b545b96f4ae121d6ff0f7f0",
+     "from": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/exterior_wall_cladding/exterior_wall_cladding_nor_gl_1k.jpg"
+    },
+    "arm": {
+     "file": "tex/exterior_wall_cladding_arm.webp",
+     "bytes": 95610,
+     "sha256": "49a5a4f3e4181fd399a65e0b2794cf1f3dbedc29f52ec6352f487c84fc9d360d",
+     "from": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/exterior_wall_cladding/exterior_wall_cladding_arm_1k.jpg"
+    }
+   },
+   "use": "外壁（石調タイル）",
+   "page": "https://polyhaven.com/a/exterior_wall_cladding"
+  },
+  "painted_metal_shutter": {
+   "name": "Painted Metal Shutter",
+   "size": [
+    2,
+    2
+   ],
+   "authors": [
+    "Dario Barresi",
+    "Rico Cilliers",
+    "Charlotte Baglioni"
+   ],
+   "maps": {
+    "nor": {
+     "file": "tex/painted_metal_shutter_nor.webp",
+     "bytes": 145430,
+     "sha256": "673cee8c08a6bff913bb9c88d606118a76913612b861da7b56fbc81b480d959c",
+     "from": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/painted_metal_shutter/painted_metal_shutter_nor_gl_1k.jpg"
+    },
+    "arm": {
+     "file": "tex/painted_metal_shutter_arm.webp",
+     "bytes": 98098,
+     "sha256": "a752e00f722a0d63bbf28c210e6f90b4c158b8428a689a0862f1c71f6fdaff86",
+     "from": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/painted_metal_shutter/painted_metal_shutter_arm_1k.jpg"
+    }
+   },
+   "use": "外壁サイディング",
+   "page": "https://polyhaven.com/a/painted_metal_shutter"
+  },
+  "large_floor_tiles_02": {
+   "name": "Large Floor Tiles 02",
+   "size": [
+    3,
+    3
+   ],
+   "authors": [
+    "Rob Tuytel"
+   ],
+   "maps": {
+    "diff": {
+     "file": "tex/large_floor_tiles_02_diff.webp",
+     "bytes": 246328,
+     "sha256": "60a9987e046765a39b11e10c671061edf9f942a7f00937f4b8624cd947fd1872",
+     "from": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/large_floor_tiles_02/large_floor_tiles_02_diff_1k.jpg"
+    },
+    "nor": {
+     "file": "tex/large_floor_tiles_02_nor.webp",
+     "bytes": 42694,
+     "sha256": "ff29354689b631e6d3af3624b124f038236a6efde805fb0911374d1a0715cb61",
+     "from": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/large_floor_tiles_02/large_floor_tiles_02_nor_gl_1k.jpg"
+    },
+    "arm": {
+     "file": "tex/large_floor_tiles_02_arm.webp",
+     "bytes": 193982,
+     "sha256": "197828a5eca37f8106892684d642680281e52c25478c5d41c51c6816df7f40e2",
+     "from": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/large_floor_tiles_02/large_floor_tiles_02_arm_1k.jpg"
+    }
+   },
+   "use": "駐車場・外構",
+   "page": "https://polyhaven.com/a/large_floor_tiles_02"
+  },
+  "asphalt_floor": {
+   "name": "Asphalt Floor",
+   "size": [
+    2.35,
+    2.35
+   ],
+   "authors": [
+    "eye-candy.xyz"
+   ],
+   "maps": {
+    "diff": {
+     "file": "tex/asphalt_floor_diff.webp",
+     "bytes": 373722,
+     "sha256": "52cba0e34064ae716506c126c93921e44bc6125fe85445433fe4f01232bfb63a",
+     "from": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/asphalt_floor/asphalt_floor_diff_1k.jpg"
+    },
+    "nor": {
+     "file": "tex/asphalt_floor_nor.webp",
+     "bytes": 560128,
+     "sha256": "dcb47bfe316ad7440c7d38f01e5a3b480b4201ab7a256c71619f1af9cafa0ecb",
+     "from": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/asphalt_floor/asphalt_floor_nor_gl_1k.jpg"
+    },
+    "arm": {
+     "file": "tex/asphalt_floor_arm.webp",
+     "bytes": 196278,
+     "sha256": "22a1c490d8b5a9bbf166e4e7dcc64846b23e3b099b7afdfecc546f06b103755a",
+     "from": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/asphalt_floor/asphalt_floor_arm_1k.jpg"
+    }
+   },
+   "use": "道路",
+   "page": "https://polyhaven.com/a/asphalt_floor"
+  }
+ },
+ "models": {
+  "potted_plant_04": {
+   "name": "Potted Plant 04",
+   "file": "models/potted_plant_04.glb",
+   "bytes": 614848,
+   "sha256": "0c46f6fc5303fd6da4d426d8c6a9a85579d666aaeb9ba7315b6f988a678804be",
+   "authors": [
+    "James Ray Cock"
+   ],
+   "use": "観葉植物",
+   "page": "https://polyhaven.com/a/potted_plant_04"
+  },
+  "potted_plant_02": {
+   "name": "Potted Plant 02",
+   "file": "models/potted_plant_02.glb",
+   "bytes": 2336720,
+   "sha256": "4e656f0ff1fdbf27434e72850feafaa9c141d71457c8229ed822d1481df05d63",
+   "authors": [
+    "Rico Cilliers"
+   ],
+   "use": "観葉植物",
+   "page": "https://polyhaven.com/a/potted_plant_02"
+  },
+  "modern_arm_chair_01": {
+   "name": "Modern Arm Chair 01",
+   "file": "models/modern_arm_chair_01.glb",
+   "bytes": 527960,
+   "sha256": "eacf25b986cade0f849d31a088ffdd03e76469c47ecc7a150a8639cc2cb8de88",
+   "authors": [
+    "Vibrant Nordic"
+   ],
+   "use": "アームチェア",
+   "page": "https://polyhaven.com/a/modern_arm_chair_01"
+  },
+  "modern_ceiling_lamp_01": {
+   "name": "Modern Ceiling Lamp 01",
+   "file": "models/modern_ceiling_lamp_01.glb",
+   "bytes": 290620,
+   "sha256": "43810d90d84202c3cbff16edfb155d429dd98738463b1672673f9905ea494ee7",
+   "authors": [
+    "James Ray Cock"
+   ],
+   "use": "ペンダント照明",
+   "page": "https://polyhaven.com/a/modern_ceiling_lamp_01"
+  },
+  "modern_wooden_cabinet": {
+   "name": "Modern Wooden Cabinet",
+   "file": "models/modern_wooden_cabinet.glb",
+   "bytes": 1366912,
+   "sha256": "2febc8db830a30f431f62b662d4338903b975be9ee1070bd3d83eab5c61841f9",
+   "authors": [
+    "Patrik Pangerl"
+   ],
+   "use": "サイドボード",
+   "page": "https://polyhaven.com/a/modern_wooden_cabinet"
+  },
+  "ceramic_vase_01": {
+   "name": "Ceramic Vase 01",
+   "file": "models/ceramic_vase_01.glb",
+   "bytes": 316668,
+   "sha256": "44302f2267d70112c37f27586dfd0de7c9408ae9892190bfd41e3cea72b0c75a",
+   "authors": [
+    "James Ray Cock"
+   ],
+   "use": "花瓶",
+   "page": "https://polyhaven.com/a/ceramic_vase_01"
+  },
+  "standing_picture_frame_01": {
+   "name": "Standing Picture Frame 01",
+   "file": "models/standing_picture_frame_01.glb",
+   "bytes": 321356,
+   "sha256": "5021a5174d1a8a2318578b6ae3c1b89264ae0b894f881ea3638115454a6e75a9",
+   "authors": [
+    "James Ray Cock"
+   ],
+   "use": "フォトフレーム",
+   "page": "https://polyhaven.com/a/standing_picture_frame_01"
+  }
+ },
+ "hdri": {
+  "id": "kloofendal_48d_partly_cloudy_puresky",
+  "name": "Kloofendal 48d Partly Cloudy (Pure Sky)",
+  "file": "hdri/kloofendal_48d_partly_cloudy_puresky_1k.hdr",
+  "bytes": 1435119,
+  "sha256": "fd94c84997b8a3c353b62c2125a9b44e19509956986a126e472684432a02d798",
+  "authors": [
+   "Greg Zaal",
+   "Jarod Guest"
+  ],
+  "use": "空・窓外の景色・反射",
+  "page": "https://polyhaven.com/a/kloofendal_48d_partly_cloudy_puresky"
+ }
+}
