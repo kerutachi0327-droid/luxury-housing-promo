@@ -22,10 +22,11 @@ const EYE = 1.5; // camera height above the floor (m)
 const floorById = Object.fromEntries(FLOORS.map(f => [f.id, f]));
 const state = { place: 'exterior', mode: 'exterior', photo: false, ready: false, floor: '2F', yaw: 0, pitch: 0, pos: new THREE.Vector3(), fovScale: 1, orbit: { theta: 0, phi: 1.1, dist: 22, target: new THREE.Vector3() }, measuring: false, touring: false };
 const isTouch = matchMedia('(pointer: coarse)').matches;
-const lowPower = isTouch || (navigator.hardwareConcurrency || 8) <= 4;
+const QUERY = new URLSearchParams(location.search);
+const lowPower = QUERY.get('q') === 'low' || (QUERY.get('q') !== 'high' && (isTouch || (navigator.hardwareConcurrency || 8) <= 4));
 
 // ------------------------------------------------------------------ renderer
-let renderer, composer, gtao, scene, camera, house, mats, nav, lights = [], skyTex = null, roomEnv = null, skyEnv = null, sun;
+let renderer, composer, gtao, scene, camera, house, mats, nav, lights = [], skyTex = null, roomEnv = null, skyEnv = null, sun, hemi;
 let pixelRatio = Math.min(devicePixelRatio, lowPower ? 1.5 : 2);
 
 function initRenderer() {
@@ -33,7 +34,7 @@ function initRenderer() {
   if (!renderer.capabilities.isWebGL2) throw new Error('WebGL2 unavailable');
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.NeutralToneMapping;
-  renderer.toneMappingExposure = 1.0;
+  renderer.toneMappingExposure = 1.12;
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFShadowMap;
   renderer.setPixelRatio(pixelRatio);
@@ -57,7 +58,8 @@ function initRenderer() {
   }
   composer.addPass(new OutputPass());
   // lighting
-  scene.add(new THREE.HemisphereLight(0xf3f6fa, 0x9c9283, 0.35));
+  hemi = new THREE.HemisphereLight(0xf3f6fa, 0x9c9283, 0.35);
+  scene.add(hemi);
   sun = new THREE.DirectionalLight(0xfff0dc, 2.6);
   sun.position.set(-14, 16, -8);
   sun.target.position.set(2.1, 2, -6);
@@ -143,7 +145,8 @@ function applyVisibility() {
   for (const p of lights) p.intensity = (m === 'walk' || m === 'dollhouse' || m === 'plan') ? (p.userData.floor === state.floor || m === 'walk' ? 2.2 : 0) : 1.4;
   const outdoor = m === 'exterior';
   scene.environment = outdoor && skyEnv ? skyEnv : roomEnv;
-  scene.environmentIntensity = outdoor ? 0.9 : 0.55;
+  scene.environmentIntensity = outdoor ? 0.9 : (lowPower ? 1.15 : 0.85);
+  hemi.intensity = outdoor ? 0.35 : (lowPower ? 0.9 : 0.35);
   scene.background = skyTex && (m === 'exterior' || m === 'walk') ? skyTex : new THREE.Color(m === 'plan' ? 0xf1efea : 0xe4e8ea);
   scene.backgroundIntensity = 1;
   markers.forEach(mk => { mk.visible = m === 'walk' && mk.userData.floor === state.floor; });
@@ -682,7 +685,7 @@ $('fallback').onclick = () => { ui.error.hidden = true; setPhoto(true); };
     animateTo(orbitCameraState(), 2200);
     ui.photo.hidden = true; ui.canvas.hidden = false;
     document.body.classList.add('ready');
-    if (new URLSearchParams(location.search).has('tour')) startTour();
+    if (QUERY.has('tour')) startTour();
     window.__viewer = { state, setMode, goView, camera, scene, renderer, walkable, nav };
   } catch (e) {
     console.error(e);

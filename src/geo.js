@@ -62,7 +62,7 @@ export function slopedCeiling(x0, x1, z1, z2, y0, y1) {
   const g = new THREE.BufferGeometry();
   const pos = [x0, y0, z1, x1, y1, z1, x1, y1, z2, x0, y0, z2];
   g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
-  g.setIndex([0, 2, 1, 0, 3, 2]);
+  g.setIndex([0, 1, 2, 0, 2, 3]); // faces down (seen from the room)
   g.computeVertexNormals();
   const uv = [x0, z1, x1, z1, x1, z2, x0, z2];
   g.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2));

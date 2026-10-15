@@ -3,7 +3,7 @@
 import * as THREE from 'three';
 import { FLOORS, EXTERIOR, LEVEL, SLAB } from './plan.js';
 import { Builder, aabb, block, cylinder, quad, slopedCeiling, place, metricUV } from './geo.js';
-import { addFurniture, addBuiltIn } from './furniture.js';
+import { addFurniture, addBuiltIn, placeModel } from './furniture.js';
 
 const EPS = 0.002;
 
@@ -131,6 +131,7 @@ function buildOpening(B, floor, w, f, o) {
     const inner = -sg * t / 2;
     const lo = sg > 0 ? [inner, plane - 0.035] : [plane + 0.035, inner];
     if (o.sill > 0.05) wallBox(B, g, 'white', f, o.from - 0.01, o.to + 0.01, lo[0] - 0.015 * sg, lo[1] - 0.015 * sg, y0 - 0.02, y0);
+    if (isExt && span >= 0.6 && !o.frosted && !o.fix) addCurtains(B, floor, f, o, sg, t);
     if (o.grille) {
       const go = sg * (t / 2 + 0.05);
       for (let s = o.from + 0.06; s < o.to - 0.03; s += 0.11) wallBox(B, `${floor.id}:ext`, 'frameLight', f, s, s + 0.018, go - 0.01, go + 0.01, y0 - 0.05, y1 + 0.05);
@@ -140,8 +141,9 @@ function buildOpening(B, floor, w, f, o) {
     return;
   }
   if (o.kind === 'opening') return;
-  // doors: casing + leaf
+  // doors: casing + leaf + light switch beside the frame
   const cw = 0.025;
+  if (o.kind !== 'entry' && o.kind !== 'bifold') for (const side of [-1, 1]) wallBox(B, `${floor.id}:furn`, 'whiteGloss', f, o.to + 0.08, o.to + 0.15, side * (t / 2) - (side < 0 ? 0.008 : 0), side * (t / 2) + (side > 0 ? 0.008 : 0), base + 1.15, base + 1.27);
   const caseMat = 'doorV';
   wallBox(B, g, caseMat, f, o.from - cw, o.from, -t / 2 - 0.008, t / 2 + 0.008, base, y1 + cw);
   wallBox(B, g, caseMat, f, o.to, o.to + cw, -t / 2 - 0.008, t / 2 + 0.008, base, y1 + cw);
@@ -159,21 +161,44 @@ function buildOpening(B, floor, w, f, o) {
     for (const side of [-1, 1]) wallBox(B, g, 'steel', f, s, s + 0.02, side * 0.025, side * 0.075, base + 0.95, base + 1.25);
     return;
   }
-  // interior swing door shown open (≈80°) so rooms read as connected
+  // swing door: open (≈80°) into the room given by o.swing, or closed (o.open === 0)
   const leafW = span - 0.008, leafH = y1 - base - 0.01;
   const mat = o.kind === 'glassDoor' ? 'frosted' : 'door';
+  const swing = o.swing ?? 1, ang = o.open === 0 ? 0 : 1.35;
   const leaf = block(leafW, leafH, leafT, { base: true });
   const handle = block(0.12, 0.02, 0.02, { base: true }); handle.translate(leafW / 2 - 0.08, 0.98, leafT / 2 + 0.03);
-  const handle2 = handle.clone(); handle2.translate(0, 0, -leafT - 0.06);
-  // hinge at o.from, swing towards +offset side
-  const ang = 1.35;
-  const hinge = f.vertical ? new THREE.Vector3(f.c + t / 2, base, o.from) : new THREE.Vector3(o.from, base, f.c + t / 2);
-  const m = new THREE.Matrix4();
-  // leaf in local space spans x: 0..leafW
-  const toLocal = new THREE.Matrix4().makeTranslation(leafW / 2, 0, 0);
-  const rot = new THREE.Matrix4().makeRotationY(f.vertical ? -Math.PI / 2 - ang : -ang);
-  m.makeTranslation(hinge.x, hinge.y, hinge.z).multiply(rot).multiply(toLocal);
+  const handle2 = block(0.12, 0.02, 0.02, { base: true }); handle2.translate(leafW / 2 - 0.08, 0.98, -leafT / 2 - 0.03);
+  // wall-local (s along wall, o across) -> world
+  const hingeO = ang ? swing * (t / 2) : 0;
+  const ds = Math.cos(ang), dO = swing * Math.sin(ang);
+  const toWorld = (sv, ov) => (f.vertical ? [f.c + ov, sv] : [sv, f.c + ov]);
+  const [hx, hz] = toWorld(o.from + 0.004, hingeO);
+  const [dx, dz] = f.vertical ? [dO, ds] : [ds, dO];
+  const theta = Math.atan2(-dz, dx);
+  const m = new THREE.Matrix4().makeTranslation(hx + dx * leafW / 2, base + 0.005, hz + dz * leafW / 2).multiply(new THREE.Matrix4().makeRotationY(theta));
   for (const [geo, mt] of [[leaf, mat], [handle, 'steel'], [handle2, 'steel']]) { geo.applyMatrix4(m); B.add(`${floor.id}:furn`, mt, geo); }
+}
+
+// gathered drapes on both sides of a window (room side)
+function addCurtains(B, floor, f, o, sg, t) {
+  const base = floor.level;
+  const face = -sg * (t / 2) - sg * 0.09; // 9cm into the room
+  const top = base + Math.min(o.head + 0.1, (floor.ceiling || 2.4) - 0.02);
+  const bottom = o.sill < 0.05 ? base + 0.01 : base + o.sill - 0.12;
+  const h = top - bottom, pw = 0.24;
+  for (const [s0, dir] of [[o.from - 0.12, 1], [o.to + 0.12 - pw, -1]]) {
+    const g = new THREE.PlaneGeometry(pw, h, 16, 1);
+    const p = g.attributes.position;
+    for (let i = 0; i < p.count; i++) p.setZ(i, Math.sin((p.getX(i) + pw / 2) / pw * Math.PI * 5) * 0.035);
+    g.computeVertexNormals(); metricUV(g);
+    g.translate(pw / 2, h / 2, 0);
+    if (f.vertical) { g.rotateY(Math.PI / 2); g.translate(f.c + face, bottom, s0 + pw); }
+    else g.translate(s0, bottom, f.c + face);
+    B.add(`${floor.id}:furn`, 'curtain', g);
+    void dir;
+  }
+  // rail
+  wallBox(B, `${floor.id}:furn`, 'white', f, o.from - 0.15, o.to + 0.15, Math.min(face, face + sg * 0.04) - 0.02, Math.max(face, face + sg * 0.04) + 0.02, top, top + 0.04);
 }
 
 // ---- floors, ceilings ----------------------------------------------------
@@ -267,7 +292,7 @@ function facadeMaterial(floor, w) {
   return 'extWhite';
 }
 
-function buildExterior(B, mats) {
+function buildExterior(B, mats, models) {
   const W = EXTERIOR.width, g = 'ext:main';
   const L1 = LEVEL['1F'], L2 = LEVEL['2F'], L3 = LEVEL['3F'];
   const [gx1, gz1, gx2, gz2] = EXTERIOR.garage;
@@ -317,17 +342,22 @@ function buildExterior(B, mats) {
   B.box('site', 'steel', site.west + 0.08, 0.95, site.north + 0.14, site.west + 0.32, 1.1, site.north + 0.16);
   B.box('site', 'extStone', site.west + 0.4, 0.05, site.north + 0.1, site.west + 0.6, 1.9, site.north + 0.5);
   B.box('site', 'walnut', site.west + 0.62, 0.05, site.north + 0.25, site.west + 0.66, 1.8, site.north + 0.9);
-  B.box('site', 'hedge', site.east - 0.45, 0.05, site.north + 0.1, site.east - 0.1, 0.9, site.north + 1.4);
+  placeModel(B, 'site', models, 'potted_plant_04', site.east - 0.3, 0.05, site.north + 0.5, 0, 1.1);
+  placeModel(B, 'site', models, 'potted_plant_02', W - 0.45, 0.05, EXTERIOR.porch[1] - 0.6, 0, 0.9);
   // neighbours: plain three-storey blocks with windows
-  for (const [x1, x2] of [[-8.5, site.west - 0.35], [site.east + 0.35, site.east + 8.5]]) {
-    B.box('site', 'neighbour', x1, 0, -12.6, x2, 9.4, 3);
+  for (const [x1, x2, h, front] of [[-8.5, site.west - 0.45, 7.6, -10.2], [site.east + 0.45, site.east + 8.5, 8.4, -9.6]]) {
+    B.box('site', 'neighbour', x1, 0, front, x2, h, 3);
     const face = x1 < 0 ? x2 : x1, s = x1 < 0 ? 1 : -1;
     void face; void s;
-    for (const y of [1.2, 4.2, 7.2]) for (const z of [-11.2, -6.5, -2]) {
+    for (const y of [1.0, 4.0]) for (const z of [-8.8, -5, -1.5]) {
       const wx = x1 < 0 ? x2 : x1;
-      B.box('site', 'neighbourWin', wx - 0.02, y, z, wx + 0.02, y + 1.2, z + 1.4);
+      B.box('site', 'neighbourWin', wx - 0.02, y + 0.8, z, wx + 0.02, y + 1.7, z + 0.8);
     }
-    for (const y of [1.2, 4.2, 7.2]) B.box('site', 'neighbourWin', x1 + 1, y, -12.62, x2 - 1, y + 1.3, -12.58);
+    for (const y of [1.0, 4.0]) for (const k of [0.25, 0.6]) {
+      const cx = x1 + (x2 - x1) * k;
+      B.box('site', 'frame', cx - 0.66, y + 0.66, front - 0.03, cx + 0.66, y + 1.84, front + 0.01);
+      B.box('site', 'neighbourWin', cx - 0.6, y + 0.7, front - 0.04, cx + 0.6, y + 1.8, front);
+    }
   }
 }
 
@@ -379,7 +409,7 @@ export function buildHouse(mats, models) {
     }
     nav[floor.id] = { blocked, footprint: [...floor.footprint, ...(floor.balconies || []).map(b => b.rect)] };
   });
-  buildExterior(B, mats);
+  buildExterior(B, mats, models);
   const root = B.build();
   return { root, lightRig, nav };
 }

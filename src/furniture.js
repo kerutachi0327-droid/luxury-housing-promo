@@ -225,6 +225,16 @@ export function addBuiltIn(B, floor, b, blocked, models) {
       blocked.push([x1 - 0.1, z1, x2 + 0.1, z2]);
       return;
     }
+    case 'aircon': { // wall-mounted room air conditioner (W800 H290 D250)
+      const [x, z] = b.at, rot = { E: Math.PI / 2, W: -Math.PI / 2, N: Math.PI, S: 0 }[b.facing];
+      const top = L + (b.top || 2.32);
+      const parts = [
+        [P(0.8, 0.29, 0.24, 0, -0.29, 0, { radius: 0.03 }), 'whiteGloss'],
+        [P(0.72, 0.012, 0.05, 0, -0.27, 0.11), 'darkGrey'],
+      ];
+      assemble(B, g, parts, x, top, z, rot);
+      return;
+    }
     default:
   }
 }
