@@ -21,13 +21,26 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Check plan dimensions against the brochure
+        run: npm run check
+      - name: Build viewer
+        run: npm run build
       - name: Prepare site
         run: |
-          mkdir -p _site
-          rsync -a --exclude '.git' --exclude '.github' --exclude '_site' --exclude '*.zip' ./ _site/
+          mkdir -p _site/assets
+          cp index.html style.css _site/
+          cp -r dist _site/dist
+          cp assets/*.png _site/assets/ 2>/dev/null || true
+          if [ -d assets/lib ]; then cp -r assets/lib _site/assets/lib; fi
+          if [ -f CREDITS.md ]; then cp CREDITS.md _site/; fi
       - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v4
         with:
           path: _site
       - id: deployment

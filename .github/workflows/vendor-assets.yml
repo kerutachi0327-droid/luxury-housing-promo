@@ -1,0 +1,31 @@
+name: Vendor 3D assets
+
+# Downloads the CC0 textures / models / sky listed in tools/assets.json from
+# Poly Haven, converts them (webp, 1024px) and commits them to assets/lib.
+# Run manually whenever tools/assets.json changes.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Fetch and convert assets
+        run: npm run assets
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/lib CREDITS.md
+          git diff --cached --quiet && { echo "no changes"; exit 0; }
+          git commit -m "Vendor CC0 3D assets from Poly Haven"
+          git push
