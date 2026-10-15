@@ -184,8 +184,27 @@ function buildMarkers() {
 function walkable(fid, x, z) {
   const n = nav?.[fid]; if (!n) return false;
   const m = 0.2;
-  if (!n.footprint.some(r => x > r[0] + m && x < r[2] - m && z > r[1] + m && z < r[3] - m)) return false;
+  // the body (radius m) must lie inside the union of footprint rects (rooms + balconies)
+  const inFoot = (px, pz) => n.footprint.some(r => px > r[0] && px < r[2] && pz > r[1] && pz < r[3]);
+  if (![[0, 0], [m, 0], [-m, 0], [0, m], [0, -m]].every(([dx, dz]) => inFoot(x + dx, z + dz))) return false;
   return !n.blocked.some(r => inside(r, x, z, m - 0.02));
+}
+
+// line of sight at waist and head height (walls, glass, closed doors, furniture)
+const losRay = new THREE.Raycaster();
+function clearPath(fid, x, z) {
+  const f = floorById[fid];
+  const objs = [];
+  house.traverse(o => { if (o.isMesh && isVisibleChain(o)) { let g = null; for (let p = o; p && !g; p = p.parent) g = p.userData?.group; if (g && g.startsWith(fid + ':') && !g.endsWith(':ceiling')) objs.push(o); } });
+  const to = new THREE.Vector3(x, 0, z);
+  for (const h of [0.9, 1.45]) {
+    const from = new THREE.Vector3(state.pos.x, f.level + h, state.pos.z);
+    const target = to.clone().setY(f.level + h);
+    const d = from.distanceTo(target); if (d < 0.05) continue;
+    losRay.set(from, target.sub(from).normalize()); losRay.far = d;
+    if (losRay.intersectObjects(objs, true).length) return false;
+  }
+  return true;
 }
 
 // ------------------------------------------------------------------ camera rig
@@ -261,14 +280,16 @@ function renderViewChips() {
 
 function orbitTargetFor(mode, fid) {
   const f = floorById[fid];
-  const cx = EXTERIOR.width / 2, cz = -5.8;
+  const fp = f ? f.footprint : [[0, -11.5, 4.2, 0]];
+  const cx = (Math.min(...fp.map(r => r[0])) + Math.max(...fp.map(r => r[2]))) / 2;
+  const cz = (Math.min(...fp.map(r => r[1])) + Math.max(...fp.map(r => r[3]))) / 2;
   if (mode === 'exterior') return { target: new THREE.Vector3(cx, 4.3, -6.2), theta: Math.PI, phi: 1.36, dist: 24 };
-  if (mode === 'plan') return { target: new THREE.Vector3(cx, f.level, cz), theta: Math.PI, phi: 0.0001, dist: 34 };
+  if (mode === 'plan') return { target: new THREE.Vector3(cx, f.level, cz), theta: Math.PI, phi: 0.0001, dist: camera && camera.aspect < 1 ? 44 : 34 };
   return { target: new THREE.Vector3(cx, f.level + 0.8, cz), theta: Math.PI - 0.6, phi: 0.95, dist: 19 };
 }
 
 function setMode(mode, opts = {}) {
-  stopTour(false);
+  if (!opts.fromTour) stopTour(false);
   if (!state.ready) return;
   if (state.photo) setPhoto(false);
   const prevMode = state.mode;
@@ -427,6 +448,7 @@ function click(e) {
       let d = len - 0.6; while (d > 0.3 && !walkable(f.id, state.pos.x + dir.x * d, state.pos.z + dir.z * d)) d -= 0.15;
       if (d <= 0.3) return; x = state.pos.x + dir.x * d; z = state.pos.z + dir.z * d;
     } else if (!walkable(f.id, x, z)) return;
+    if (!clearPath(f.id, x, z)) { ui.hint.hidden = false; ui.hint.textContent = '壁や家具の向こうへは直接移動できません。見学地点（白い丸）か、手前の床を選んでください。'; clearTimeout(hintTimer); hintTimer = setTimeout(() => { if (!state.measuring) ui.hint.hidden = true; }, 2600); return; }
     moveTo(f.id, x, z);
     return;
   }
@@ -446,6 +468,7 @@ function click(e) {
 }
 function nearestView(f, x, z) { return f.views.reduce((b, v) => (Math.hypot(v.eye[0] - x, v.eye[1] - z) < Math.hypot(b.eye[0] - x, b.eye[1] - z) ? v : b)); }
 
+let hintTimer = null;
 const keys = new Set();
 addEventListener('keydown', e => {
   if (e.target instanceof HTMLInputElement || $('info').open) return;
@@ -489,8 +512,12 @@ function measureClick(e) {
   const dot = new THREE.Mesh(new THREE.SphereGeometry(0.025, 16, 12), new THREE.MeshBasicMaterial({ color: 0xd6542d, depthTest: false }));
   dot.position.copy(h.point); dot.renderOrder = 20; scene.add(dot); mDots.push(dot);
   if (mPts.length === 2) {
-    const g = new THREE.BufferGeometry().setFromPoints(mPts);
-    mLine = new THREE.Line(g, new THREE.LineBasicMaterial({ color: 0xd6542d, depthTest: false, linewidth: 2 }));
+    const len = mPts[0].distanceTo(mPts[1]);
+    const g = new THREE.CylinderGeometry(0.008, 0.008, len, 8);
+    g.rotateX(Math.PI / 2);
+    mLine = new THREE.Mesh(g, new THREE.MeshBasicMaterial({ color: 0xd6542d, depthTest: false }));
+    mLine.position.copy(mPts[0]).add(mPts[1]).multiplyScalar(0.5);
+    mLine.lookAt(mPts[1]);
     mLine.renderOrder = 20; scene.add(mLine);
     const d = mPts[0].distanceTo(mPts[1]);
     const dh = Math.hypot(mPts[0].x - mPts[1].x, mPts[0].z - mPts[1].z), dv = Math.abs(mPts[0].y - mPts[1].y);
@@ -507,7 +534,8 @@ function buildLabels() {
     const el = document.createElement('div'); el.className = 'room-label';
     const [x1, z1, x2, z2] = r.rect;
     const w = Math.abs(x2 - x1), d = Math.abs(z2 - z1);
-    el.innerHTML = r.jo ? `<b>${r.name}</b><span>${r.jo}帖</span><small>約${w.toFixed(1)}×${d.toFixed(1)}m</small>` : `<b>${r.name}</b>`;
+    const simple = !r.plus?.length && !r.minus?.length;
+    el.innerHTML = r.jo ? `<b>${r.name}</b><span>${r.jo}帖</span>${simple ? `<small>約${w.toFixed(1)}×${d.toFixed(1)}m</small>` : ''}` : `<b>${r.name}</b>`;
     ui.labels.append(el);
     labelEls.push({ el, floor: f.id, pos: new THREE.Vector3((x1 + x2) / 2, f.level + 0.05, (z1 + z2) / 2) });
   }
@@ -566,15 +594,14 @@ function nextTour() {
   let wait = 3600;
   if (s.view) {
     const [fid, i] = s.view;
-    if (fid !== state.floor && state.mode === 'walk') { fade(() => { goView(fid, i, 10); }); wait = 3800; }
-    else goView(fid, i, 1500);
-    // slow look-around while holding
-    const yaw0 = state.yaw;
-    const t0 = performance.now() + 1500;
-    tourPan = { t0, yaw0, amp: 0.35, dur: 2400 };
+    // slow look-around while holding (captured after the move so the yaw is the new view's)
+    const pan = () => { tourPan = { t0: performance.now() + 1500, yaw0: state.yaw, amp: 0.35, dur: 2400 }; };
+    tourPan = null;
+    if (fid !== state.floor && state.mode === 'walk') { fade(() => { goView(fid, i, 10); pan(); }); wait = 3800; }
+    else { goView(fid, i, 1500); pan(); }
   } else {
     tourPan = null;
-    if (s.mode !== state.mode || s.floor) setMode(s.mode, { floor: s.floor });
+    if (s.mode !== state.mode || s.floor) setMode(s.mode, { floor: s.floor, fromTour: true });
     if (s.theta !== undefined) { Object.assign(state.orbit, { theta: s.theta, phi: s.phi, dist: s.dist }); animateTo(orbitCameraState(), s.ms); }
     wait = (s.ms || 1500) + (s.hold || 1500);
   }

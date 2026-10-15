@@ -7,7 +7,7 @@
 // Scale: the building is 4.5 modules wide (4.5 x 910 mm = 4.095 m between
 // wall centres). That width is 353 px in the drawing, so 1 px = 0.0116 m.
 // Cross-check: every room area below is compared with the brochure 帖 figure
-// by tools/check-plan.mjs (run in CI). Expected tolerance: ±8 %.
+// by tools/check-plan.mjs (run in CI). Tolerance: ±6 %.
 //
 // Axes: x = east (m, 0 = west outer face), z = south (m, 0 = rear outer face,
 // negative = towards the road on the north side), y = up.
@@ -44,40 +44,59 @@ const win = (a, b, sill, head, o = {}) => ({ at: [a, b], kind: 'window', sill, h
 // ---------------------------------------------------------------- 1F
 const first = {
   id: F1, label: '1階', level: LEVEL[F1], ceiling: 2.3,
-  footprint: [R(F1, 137, 529, 490, 1184), R(F1, 137, 599, 290, 529)],
+  footprint: [R(F1, 137, 529, 490, 1142), R(F1, 137, 1142, 287, 1184)],
+  // ceilings follow the CH values written on the plan; the toilet sits under
+  // the stair so its ceiling follows the stair soffit (keep: not cut by the void)
+  ceilings: [
+    { rect: R(F1, 137, 529, 290, 755), h: 2.3 },
+    { rect: R(F1, 212, 755, 290, 1030), h: 2.3 },
+    { rect: R(F1, 137, 870, 212, 1030), h: 2.3 },
+    { rect: R(F1, 219, 1030, 290, 1072), h: 2.3 },
+    { rect: R(F1, 137, 755, 212, 807), h: 2.3, keep: true },
+    { rect: R(F1, 137, 807, 212, 870), slopeZ: { z0: Z(F1, 807), h0: 2.3, z1: Z(F1, 870), h1: 1.6 }, keep: true },
+    { rect: R(F1, 290, 529, 490, 876), h: 2.3 },
+    { rect: R(F1, 290, 876, 490, 1075), h: 2.25 },
+    { rect: R(F1, 219, 1072, 300, 1142), h: 2.15 },
+    { rect: R(F1, 300, 1075, 490, 1142), h: 2.2 },
+    { rect: R(F1, 137, 1030, 219, 1184), h: 2.15 },
+    { rect: R(F1, 219, 1142, 287, 1184), h: 2.15 },
+  ],
   walls: [
-    W(F1, 137, 599, 137, 1184, ext('W')),
-    W(F1, 490, 529, 490, 1184, ext('E', [win(608, 758, 0.85, 2.0, { grille: true }), win(992, 1102, 0.85, 2.0, { grille: true })])),
-    W(F1, 137, 1184, 490, 1184, ext('S', [win(306, 423, 0.9, 2.0)])),
+    W(F1, 137, 599, 137, 1184, ext('W', [win(775, 797, 1.25, 1.65, { frosted: true })])),
+    W(F1, 490, 529, 490, 1142, ext('E', [win(608, 758, 0.85, 2.0, { grille: true }), win(992, 1102, 0.85, 2.0, { grille: true })])),
+    W(F1, 287, 1142, 490, 1142, ext('S', [win(330, 420, 0.9, 2.0)])),
+    W(F1, 137, 1184, 287, 1184, ext('S')),
+    W(F1, 287, 1142, 287, 1184, ext('E')),
     W(F1, 290, 529, 490, 529, ext('N')),
     W(F1, 137, 599, 290, 599, ext('N', [door(175, 252, { kind: 'entry', head: 2.15 })])),
     W(F1, 290, 529, 290, 599, ext('W')),
     // interior
-    W(F1, 290, 599, 290, 1150, { openings: [door(808, 866), door(884, 942)] }),
+    W(F1, 290, 599, 290, 1075, { openings: [door(808, 866, { hinge: 'to' }), door(884, 942)] }),
+    W(F1, 219, 1072, 290, 1072),
     W(F1, 290, 876, 490, 876),
     W(F1, 137, 755, 212, 755),
     W(F1, 212, 755, 212, 870, { openings: [door(765, 830, { open: 0 })] }),
     W(F1, 137, 870, 219, 870),
     W(F1, 219, 870, 219, 961, { t: 0.06, h: 1.0 }),
     W(F1, 137, 1030, 219, 1030),
-    W(F1, 219, 1030, 219, 1184, { openings: [door(1090, 1150, { head: 1.9, open: 0 })] }),
+    W(F1, 219, 1030, 219, 1184, { openings: [door(1080, 1135, { head: 1.9, open: 0 })] }),
   ],
   rooms: [
     { name: '玄関', rect: R(F1, 137, 599, 290, 680), floor: 'tileGenkan', drop: 0.15 },
-    { name: 'ホール', rect: R(F1, 177, 680, 290, 1085) },
+    { name: 'ホール', rect: R(F1, 177, 680, 290, 1072) },
     { name: 'サービスルーム', jo: 5.1, rect: R(F1, 290, 529, 490, 876), minus: [R(F1, 378, 815, 468, 866)], ceiling: 2.3 },
-    { name: 'サービスルーム', jo: 5.2, rect: R(F1, 290, 876, 490, 1184), ceiling: 2.25 },
+    { name: 'サービスルーム', jo: 5.2, rect: R(F1, 290, 876, 490, 1075), plus: [R(F1, 219, 1075, 490, 1142), R(F1, 233, 1142, 287, 1172)], ceiling: 2.25 },
     { name: 'トイレ', rect: R(F1, 137, 755, 212, 870), floor: 'cushionFloor' },
-    { name: 'クローゼット', rect: R(F1, 137, 1030, 219, 1184), ceiling: 2.15 },
+    { name: 'クローゼット', rect: R(F1, 137, 1030, 219, 1184) },
   ],
   voids: [],
-  stairs: [{ rect: R(F1, 140, 790, 219, 1024), dir: 'north', from: 0, to: LEVEL['2F'] - LEVEL[F1], steps: 15, clipBelow: Z(F1, 870), clipHeight: 2.3 }],
+  stairs: [{ rect: R(F1, 140, 790, 219, 1024), dir: 'north', from: 0, to: LEVEL['2F'] - LEVEL[F1], steps: 15}],
   built: [
     { type: 'shoeCabinet', rect: R(F1, 137, 605, 177, 745), h: 2.0, facing: 'E' },
     { type: 'closet', rect: R(F1, 378, 815, 468, 866), h: 2.3, facing: 'N' },
     { type: 'closet', rect: R(F1, 137, 1035, 212, 1184), h: 2.15, facing: 'E', hidden: true },
     { type: 'shelf', rect: R(F1, 238, 1145, 284, 1174), h: 1.8 },
-    { type: 'toilet', at: [X(F1, 175), Z(F1, 857)], facing: 'N' },
+    { type: 'toilet', at: [X(F1, 175), Z(F1, 838)], facing: 'N' },
     { type: 'step', rect: R(F1, 137, 676, 290, 684) },
     { type: 'aircon', at: [X(F1, 290) + 0.17, Z(F1, 600)], facing: 'E', top: 2.25 },
   ],
@@ -87,7 +106,7 @@ const first = {
     { type: 'rug', rect: R(F1, 310, 690, 470, 790), color: '#cfc7ba' },
     { type: 'desk', at: [X(F1, 455), Z(F1, 1047)], rot: -Math.PI / 2, w: 1.1 },
     { type: 'chair', at: [X(F1, 415), Z(F1, 1047)], rot: -Math.PI / 2 },
-    { type: 'sofa', at: [X(F1, 316), Z(F1, 1000)], rot: Math.PI / 2, w: 1.6, color: '#bfb6a8' },
+    { type: 'sofa', at: [X(F1, 335), Z(F1, 1012)], rot: -Math.PI / 2, w: 1.6, color: '#bfb6a8' },
     { type: 'model', id: 'potted_plant_02', at: [X(F1, 470), Z(F1, 1160)], scale: 0.8 },
     { type: 'model', id: 'standing_picture_frame_01', at: [X(F1, 455), Z(F1, 545)], y: 0.55, scale: 0.6, rot: Math.PI },
   ],
@@ -106,13 +125,18 @@ const second = {
   footprint: [R(F2, 782, 195, 1136, 1182)],
   // east strip under the 3F setback: sloped ceiling (勾配天井)
   ceilings: [
-    { rect: R(F2, 782, 195, 1062, 1182), h: 2.4 },
-    { rect: R(F2, 1062, 195, 1136, 1182), slope: { x0: X(F2, 1062), h0: 2.4, x1: X(F2, 1136), h1: 2.15 } },
+    { rect: R(F2, 782, 195, 1080, 654), h: 2.4 },
+    { rect: R(F2, 1080, 195, 1136, 654), slope: { x0: X(F2, 1080), h0: 2.4, x1: X(F2, 1136), h1: 2.15 } },
+    { rect: R(F2, 782, 654, 941, 1182), h: 2.4 },
+    { rect: R(F2, 941, 654, 1047, 948), h: 2.36 },
+    { rect: R(F2, 1047, 654, 1136, 860), h: 2.05 },
+    { rect: R(F2, 1047, 860, 1136, 948), h: 2.15 },
+    { rect: R(F2, 941, 948, 1136, 1182), h: 2.4 },
   ],
   walls: [
     W(F2, 782, 195, 782, 1182, ext('W', [win(290, 434, 0.35, 2.2, { fix: true }), win(784, 806, 1.4, 1.9), win(1062, 1105, 1.3, 1.9, { frosted: true })])),
-    W(F2, 1136, 195, 1136, 1182, ext('E', [win(306, 349, 1.05, 2.0), win(541, 643, 0.85, 2.0), win(1000, 1040, 1.4, 1.9, { frosted: true })])),
-    W(F2, 782, 195, 1136, 195, ext('N', [win(800, 975, 0.8, 2.05)])),
+    W(F2, 1136, 195, 1136, 1182, ext('E', [win(306, 349, 1.05, 2.0), win(541, 643, 0.85, 2.0)])),
+    W(F2, 782, 195, 1136, 195, ext('N', [win(805, 946, 0.8, 2.05)])),
     W(F2, 782, 1182, 1136, 1182, ext('S')),
     // interior
     W(F2, 782, 520, 866, 520),
@@ -164,13 +188,13 @@ const second = {
     { type: 'diningChair', at: [X(F2, 940), Z(F2, 640)], rot: Math.PI },
     { type: 'diningChair', at: [X(F2, 1010), Z(F2, 640)], rot: Math.PI },
     { type: 'pendant', at: [X(F2, 975), Z(F2, 600)], model: 'modern_ceiling_lamp_01' },
-    { type: 'model', id: 'potted_plant_02', at: [X(F2, 892), Z(F2, 990)], scale: 0.7 },
+    { type: 'model', id: 'potted_plant_02', at: [X(F2, 1110), Z(F2, 622)], scale: 0.75 },
   ],
   lights: [[X(F2, 950), Z(F2, 330)], [X(F2, 975), Z(F2, 600)], [X(F2, 1030), Z(F2, 820)], [X(F2, 1040), Z(F2, 1050)]],
   views: [
     { name: 'LDK入口', eye: [X(F2, 905), Z(F2, 765)], look: [X(F2, 1010), Z(F2, 300)] },
-    { name: 'リビング', eye: [X(F2, 1050), Z(F2, 250)], look: [X(F2, 900), Z(F2, 700)] },
-    { name: 'ダイニング', eye: [X(F2, 880), Z(F2, 520)], look: [X(F2, 1060), Z(F2, 720)] },
+    { name: 'リビング', eye: [X(F2, 1010), Z(F2, 232)], look: [X(F2, 900), Z(F2, 700)] },
+    { name: 'ダイニング', eye: [X(F2, 895), Z(F2, 545)], look: [X(F2, 1060), Z(F2, 720)] },
     { name: 'キッチン', eye: [X(F2, 1025), Z(F2, 800)], look: [X(F2, 950), Z(F2, 350)] },
     { name: '洗面室', eye: [X(F2, 1020), Z(F2, 1000)], look: [X(F2, 1100), Z(F2, 1040)] },
   ],
@@ -181,21 +205,23 @@ const second = {
 };
 
 // ---------------------------------------------------------------- 3F
-const SLOPE3 = { x0: X(F3, 1560), h0: 2.3, x1: X(F3, 1659), h1: 1.55 };
 const third = {
   id: F3, label: '3階', level: LEVEL[F3], ceiling: 2.3,
   footprint: [R(F3, 1384, 281, 1659, 1108)],
   ceilings: [
-    { rect: R(F3, 1384, 281, 1560, 1108), h: 2.3 },
-    { rect: R(F3, 1560, 281, 1659, 1108), slope: SLOPE3 },
+    { rect: R(F3, 1384, 281, 1561, 1108), h: 2.3 },
+    { rect: R(F3, 1561, 281, 1659, 564), slope: { x0: X(F3, 1561), h0: 2.3, x1: X(F3, 1659), h1: 1.65 } },
+    { rect: R(F3, 1561, 564, 1659, 756), slope: { x0: X(F3, 1561), h0: 2.3, x1: X(F3, 1659), h1: 1.5 } },
+    { rect: R(F3, 1561, 756, 1659, 1108), slope: { x0: X(F3, 1561), h0: 2.3, x1: X(F3, 1659), h1: 1.45 } },
   ],
+
   balconies: [
     { rect: R(F3, 1384, 183, 1663, 277), rail: 'N', glass: true },
     { rect: R(F3, 1384, 1112, 1663, 1190), rail: 'S', glass: false, dryingPole: true },
   ],
   walls: [
-    W(F3, 1384, 281, 1384, 1108, ext('W', [win(304, 363, 1.0, 1.8), win(793, 814, 1.3, 1.8)])),
-    W(F3, 1659, 281, 1659, 1108, ext('E', [win(694, 729, 1.2, 1.75, { frosted: true })], { h: 1.6 })),
+    W(F3, 1384, 281, 1384, 1108, ext('W', [win(304, 363, 1.0, 1.8), win(697, 713, 1.25, 1.75, { frosted: true }), win(793, 814, 1.3, 1.8)])),
+    W(F3, 1659, 281, 1659, 1108, ext('E', [win(694, 729, 1.0, 1.38, { frosted: true })], { h: 1.7 })),
     W(F3, 1384, 281, 1659, 281, ext('N', [win(1413, 1552, 0.0, 2.0, { slider: true })])),
     W(F3, 1384, 1108, 1659, 1108, ext('S', [win(1453, 1552, 0.0, 2.0, { slider: true })])),
     // interior
@@ -233,22 +259,22 @@ const third = {
     { type: 'aircon', at: [X(F3, 1463) + 0.17, Z(F3, 930)], facing: 'E', top: 2.27 },
   ],
   furniture: [
-    { type: 'bed', size: 'double', at: [X(F3, 1384) + 1.08, Z(F3, 430)], rot: -Math.PI / 2 },
+    { type: 'bed', size: 'double', at: [X(F3, 1384) + 1.08, Z(F3, 430)], rot: Math.PI / 2 },
     { type: 'nightstand', at: [X(F3, 1405), Z(F3, 330)] },
     { type: 'nightstand', at: [X(F3, 1405), Z(F3, 530)] },
     { type: 'rug', rect: R(F3, 1555, 330, 1640, 530), color: '#cbc2b4' },
     { type: 'model', id: 'potted_plant_04', at: [X(F3, 1640), Z(F3, 300)], scale: 0.75 },
     { type: 'bed', size: 'single', at: [X(F3, 1659) - 1.08, Z(F3, 1060)], rot: Math.PI / 2 },
-    { type: 'desk', at: [X(F3, 1490), Z(F3, 870)], rot: Math.PI, w: 1.0 },
-    { type: 'chair', at: [X(F3, 1490), Z(F3, 905)], rot: Math.PI },
+    { type: 'desk', at: [X(F3, 1463) + 0.33, Z(F3, 935)], rot: Math.PI / 2, w: 1.0 },
+    { type: 'chair', at: [X(F3, 1463) + 0.82, Z(F3, 935)], rot: Math.PI / 2 },
     { type: 'model', id: 'standing_picture_frame_01', at: [X(F3, 1405), Z(F3, 530)], y: 0.55, scale: 0.6, rot: Math.PI / 2 },
   ],
   lights: [[X(F3, 1480), Z(F3, 420)], [X(F3, 1430), Z(F3, 700)], [X(F3, 1530), Z(F3, 960)]],
   views: [
     { name: 'ホール', eye: [X(F3, 1500), Z(F3, 720)], look: [X(F3, 1420), Z(F3, 600)] },
     { name: '主寝室7.2帖', eye: [X(F3, 1420), Z(F3, 600)], look: [X(F3, 1550), Z(F3, 300)] },
-    { name: '洋室5.4帖', eye: [X(F3, 1500), Z(F3, 860)], look: [X(F3, 1600), Z(F3, 1080)] },
-    { name: 'WIC', eye: [X(F3, 1500), Z(F3, 600)], look: [X(F3, 1620), Z(F3, 640)] },
+    { name: '洋室5.4帖', eye: [X(F3, 1560), Z(F3, 875)], look: [X(F3, 1600), Z(F3, 1080)] },
+    { name: 'WIC', eye: [X(F3, 1515), Z(F3, 652)], look: [X(F3, 1620), Z(F3, 600)] },
   ],
   portals: [{ at: [X(F3, 1500), Z(F3, 745)], to: '2F', label: '2階へ', arrive: { eye: [X(F2, 902), Z(F2, 985)], look: [X(F2, 902), Z(F2, 700)] } }],
 };

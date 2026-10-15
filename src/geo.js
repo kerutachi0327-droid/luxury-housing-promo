@@ -69,6 +69,17 @@ export function slopedCeiling(x0, x1, z1, z2, y0, y1) {
   return g;
 }
 
+// Ceiling sloping along z (z0 -> z1), faces down.
+export function slopedCeilingZ(x1, x2, z0, z1, y0, y1) {
+  const g = new THREE.BufferGeometry();
+  const pos = [x1, y0, z0, x2, y0, z0, x2, y1, z1, x1, y1, z1];
+  g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+  g.setIndex(z1 > z0 ? [0, 1, 2, 0, 2, 3] : [0, 2, 1, 0, 3, 2]);
+  g.computeVertexNormals();
+  g.setAttribute('uv', new THREE.Float32BufferAttribute([x1, z0, x2, z0, x2, z1, x1, z1], 2));
+  return g;
+}
+
 export function place(g, x, y, z, rotY = 0) {
   if (rotY) g.rotateY(rotY);
   g.translate(x, y, z);

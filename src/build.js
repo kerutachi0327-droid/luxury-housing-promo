@@ -2,7 +2,7 @@
 // exterior and surroundings) from the traced plan in plan.js.
 import * as THREE from 'three';
 import { FLOORS, EXTERIOR, LEVEL, SLAB } from './plan.js';
-import { Builder, aabb, block, cylinder, quad, slopedCeiling, place, metricUV } from './geo.js';
+import { Builder, aabb, block, cylinder, quad, slopedCeiling, slopedCeilingZ, place, metricUV } from './geo.js';
 import { addFurniture, addBuiltIn, placeModel } from './furniture.js';
 
 const EPS = 0.002;
@@ -30,6 +30,7 @@ export function ceilingAt(floor, x, z) {
   for (const c of floor.ceilings || []) {
     if (!inside(c.rect, x, z, 0.001)) continue;
     if (c.h) return c.h;
+    if (c.slopeZ) { const s = c.slopeZ, t = Math.min(1, Math.max(0, (z - s.z0) / (s.z1 - s.z0))); return s.h0 + (s.h1 - s.h0) * t; }
     const s = c.slope, t = Math.min(1, Math.max(0, (x - s.x0) / (s.x1 - s.x0)));
     return s.h0 + (s.h1 - s.h0) * t;
   }
@@ -170,9 +171,10 @@ function buildOpening(B, floor, w, f, o) {
   const handle2 = block(0.12, 0.02, 0.02, { base: true }); handle2.translate(leafW / 2 - 0.08, 0.98, -leafT / 2 - 0.03);
   // wall-local (s along wall, o across) -> world
   const hingeO = ang ? swing * (t / 2) : 0;
-  const ds = Math.cos(ang), dO = swing * Math.sin(ang);
+  const atTo = o.hinge === 'to';
+  const ds = (atTo ? -1 : 1) * Math.cos(ang), dO = swing * Math.sin(ang);
   const toWorld = (sv, ov) => (f.vertical ? [f.c + ov, sv] : [sv, f.c + ov]);
-  const [hx, hz] = toWorld(o.from + 0.004, hingeO);
+  const [hx, hz] = toWorld(atTo ? o.to - 0.004 : o.from + 0.004, hingeO);
   const [dx, dz] = f.vertical ? [dO, ds] : [ds, dO];
   const theta = Math.atan2(-dz, dx);
   const m = new THREE.Matrix4().makeTranslation(hx + dx * leafW / 2, base + 0.005, hz + dz * leafW / 2).multiply(new THREE.Matrix4().makeRotationY(theta));
@@ -218,22 +220,20 @@ function buildFloorSurfaces(B, floor, above, mats) {
       }
     }
   }
-  // ceilings (omit where the floor above has a stair void)
+  // ceilings (omit where the floor above has a stair void, unless kept).
+  // Lower flat ceilings are drawn as soffit blocks so the step reads correctly.
+  const maxH = floor.ceiling;
   const ceilRects = floor.ceilings || floor.footprint.map(rect => ({ rect, h: floor.ceiling }));
   const holes = (above?.voids || []);
   for (const c of ceilRects) {
     let parts = [c.rect];
-    for (const h of holes) parts = subtract(parts, h);
-    // rooms with their own (flat) ceiling height on 1F
-    if (!floor.ceilings) for (const r of floor.rooms) if (r.ceiling && r.ceiling !== floor.ceiling) for (const rr of roomRects(r)) parts = subtract(parts, rr);
+    if (!c.keep) for (const h of holes) parts = subtract(parts, h);
     for (const p of parts) {
       if (c.slope) B.add(`${floor.id}:ceiling`, 'ceiling', slopedCeiling(c.slope.x0, c.slope.x1, p[1], p[3], L + c.slope.h0, L + c.slope.h1));
+      else if (c.slopeZ) B.add(`${floor.id}:ceiling`, 'ceiling', slopedCeilingZ(p[0], p[2], c.slopeZ.z0, c.slopeZ.z1, L + c.slopeZ.h0, L + c.slopeZ.h1));
+      else if (c.h < maxH - 0.005) B.box(`${floor.id}:ceiling`, 'ceiling', p[0], L + c.h, p[1], p[2], L + maxH + 0.02, p[3]);
       else B.add(`${floor.id}:ceiling`, 'ceiling', quad(p[0], p[1], p[2], p[3], L + c.h, false));
     }
-  }
-  if (!floor.ceilings) for (const r of floor.rooms) if (r.ceiling && r.ceiling !== floor.ceiling) for (const rr of roomRects(r)) {
-    let parts = [rr]; for (const h of holes) parts = subtract(parts, h);
-    for (const p of parts) B.add(`${floor.id}:ceiling`, 'ceiling', quad(p[0], p[1], p[2], p[3], L + r.ceiling, false));
   }
   // slab body between this ceiling and the next floor (visible in dollhouse cut)
   const nextL = above ? above.level : null;
@@ -369,7 +369,7 @@ function collision(floor) {
     const f = wallFrame(w);
     const t = w.t / 2 + 0.03;
     let cur = f.s0 - t;
-    const ops = [...w.openings].filter(o => (o.kind !== 'window' || o.sill < 0.05) && o.kind !== 'bifold' && !(o.sill > 0.3)).sort((a, b) => a.from - b.from);
+    const ops = [...w.openings].filter(o => (o.kind !== 'window' || o.sill < 0.05) && o.kind !== 'bifold' && o.open !== 0 && !(o.sill > 0.3)).sort((a, b) => a.from - b.from);
     const push = (s0, s1) => { if (s1 > s0) blocked.push(f.vertical ? [f.c - t, s0, f.c + t, s1] : [s0, f.c - t, s1, f.c + t]); };
     for (const o of ops) { push(cur, o.from); cur = o.to; }
     push(cur, f.s1 + t);
