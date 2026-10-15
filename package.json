@@ -1,0 +1,16 @@
+{
+  "name": "luxury-housing-promo",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "node tools/check-plan.mjs",
+    "build": "esbuild src/main.js --bundle --minify --format=esm --target=es2020 --outfile=dist/app.js",
+    "assets": "node tools/fetch-assets.mjs"
+  },
+  "devDependencies": {
+    "@gltf-transform/cli": "4.2.1",
+    "esbuild": "0.25.10",
+    "sharp": "0.34.4",
+    "three": "0.186.1"
+  }
+}

@@ -1,13 +1,77 @@
 <!doctype html>
-<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="theme-color" content="#14222a"><meta name="description" content="高円寺 TYPE2の外観と2階LDKを、画像と3Dで体験するご案内用プレビュー。"><title>TYPE02｜高円寺 住まい体験</title><link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='5' fill='%2314222a'/%3E%3Cpath d='M8 25V7h16v18M13 11h6m-6 6h6m-6 6h6' fill='none' stroke='%23d6b58b' stroke-width='2'/%3E%3C/svg%3E"><link rel="stylesheet" href="style.css"><script defer src="app.js"></script></head>
-<body><div class="app"><header><a class="brand" href="#" aria-label="最初の外観に戻る"><span class="mark">02</span><span><strong>高円寺</strong><small>TYPE 02 · RESIDENCE</small></span></a><nav aria-label="体験する場所"><button class="tab active" data-place="exterior" aria-pressed="true">外観</button><button class="tab" data-place="first" aria-pressed="false">1階</button><button class="tab" data-place="interior" aria-pressed="false">2階 LDK</button><button class="tab" data-place="third" aria-pressed="false">3階</button></nav><button class="help icon" id="help" aria-label="操作方法とモデルについて">?</button></header>
-<main><section class="stage" aria-label="住まいのプレビュー"><img id="photo" src="assets/exterior-day.png" alt="TYPE2の外観試作・昼景。中央が対象住戸です。"><canvas id="view" tabindex="0" aria-label="住まいの3Dビュー。ドラッグで見回し、画面ボタンで移動できます。" hidden></canvas><div class="loading" id="loading" role="status" hidden><span class="spinner"></span>3Dを準備しています</div><div id="error" class="error" role="alert" hidden><strong>3Dを表示できませんでした</strong><p>画像で外観と室内をご覧いただけます。</p><button id="fallback">画像に戻る</button></div>
-<div class="scene-heading"><span id="eyebrow">EXTERIOR</span><h1 id="sceneTitle">TYPE02の外観</h1><p id="sceneText">玄関・駐車スペース・バルコニーをご覧ください。</p></div><span class="prototype">ご案内用・試作</span>
-<div id="zoomControls" class="zoom-controls" role="group" aria-label="3Dのズーム" hidden><button id="zoomOut" aria-label="引いて広く見る" title="引いて広く見る">−</button><output id="zoomValue" aria-live="polite">82°</output><button id="zoomIn" aria-label="拡大する" title="拡大する">＋</button><button id="zoomReset">標準に戻す</button></div><div class="stage-actions"><button id="reset" class="glass" hidden>視点を戻す</button><button id="fullscreen" class="glass">全画面</button></div>
-<div class="movement" id="movement" hidden aria-label="室内の移動"><button data-move="forward" aria-label="前へ進む">前へ ↑</button><div><button data-move="left" aria-label="左へ移動">← 左</button><button data-move="back" aria-label="後ろへ戻る">↓ 後ろ</button><button data-move="right" aria-label="右へ移動">右 →</button></div></div>
-<div class="tour-progress" id="tourProgress" hidden><span></span></div><div class="hint" id="hint" aria-live="polite">中央の住戸がTYPE2です。左右の建物は簡略表示です。</div></section>
-<section class="control-panel" aria-label="表示と見学の操作"><div class="display-switch" aria-label="表示形式"><button id="photoMode" aria-pressed="true" class="active">画像で見る</button><button id="modelMode" aria-pressed="false">3Dで見渡す</button></div><div id="photoViews" class="view-points" aria-label="画像を選ぶ"><button data-photo="day" aria-pressed="true" class="active">昼の外観</button><button data-photo="dusk" aria-pressed="false">夕方の外観</button></div><div id="modelViews" class="view-points" hidden aria-label="見学地点"></div><button id="tour" class="primary" hidden>自動で見学する <span aria-hidden="true">▷</span></button></section>
-<footer><span><b>TYPE02</b> <span id="fact">3階建て・外観試作</span></span><button id="details">図面を基にした概略モデルです <span aria-hidden="true">ⓘ</span></button></footer>
-</main></div>
-<dialog id="info"><div class="dialog-heading"><span>体験のご案内</span><button id="closeInfo" aria-label="説明を閉じる">×</button></div><h2>気になる場所を、ゆっくり。</h2><p>外観と各階を切り替えてご覧いただけます。1階・3階は3D表示です。</p><dl><dt>スマートフォン</dt><dd>画面を指でなぞると向きを変えられます。室内では「前へ」などのボタンを押して移動します。外観は指で回転できます。各階とも2本指を広げると拡大、閉じると広く見渡せます。</dd><dt>パソコン</dt><dd>ドラッグで見回します。室内はW・A・S・Dまたは矢印キーで移動できます。各階ともホイールまたは画面の＋／−でズームできます。室内は標準で広角表示です。</dd><dt>操作せずに見たいとき</dt><dd>3D表示の「自動で見学する」を選んでください。途中で停止したり、見学地点へ直接移動したりできます。</dd></dl><div class="model-note"><h3>このモデルについて</h3><p>公式のTYPE2間取り・仕様を参考にした試作です。寸法、屋根、外壁の貼り分け、窓高さなどに推定が含まれ、家具・照明は提案です。実際の建物・眺望・日当たりを保証するものではありません。</p><p>1階・2階LDK・3階を切り替えて見学できます。階段を使った階をまたぐ連続移動には対応していません。1階・3階は間取り画像を基にした概略モデルです。寸法、建具、設備形状は仮設定を含みます。3階の勾配天井は未再現で、天井を外して表示しています。家具は配置提案です。広角表示は遠近感が強くなるため、部屋の広さは図面の帖数と併せてご確認ください。3Dは軽量表示のため天井・照明を簡略化しています。3Dの素材表現は公式ギャラリーを参考に2026年10月15日に調整しました。写真の住戸タイプや製品型番との一致は未確認です。画像表示は従来の試作レンダリングです。</p><a href="https://www.leben-establish.jp/search/lp-koenji-lexsia-terrace/" target="_blank" rel="noopener">物件の公式情報を見る ↗</a></div><button id="startExplore" class="primary">体験に戻る</button></dialog>
-</body></html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#14222a">
+<meta name="description" content="高円寺 TYPE2を、図面寸法を基にした3Dで歩いて体験できるご案内用プレビュー。">
+<title>TYPE02｜高円寺 住まい体験</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='5' fill='%2314222a'/%3E%3Cpath d='M8 25V7h16v18M13 11h6m-6 6h6m-6 6h6' fill='none' stroke='%23d6b58b' stroke-width='2'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="style.css">
+<script type="module" src="dist/app.js"></script>
+</head>
+<body>
+<div class="app">
+<header>
+  <a class="brand" href="#" aria-label="外観に戻る"><span class="mark">02</span><span><strong>高円寺</strong><small>TYPE 02 · RESIDENCE</small></span></a>
+  <nav aria-label="見る場所">
+    <button class="tab active" data-place="exterior" aria-pressed="true">外観</button>
+    <button class="tab" data-place="1F" aria-pressed="false">1階</button>
+    <button class="tab" data-place="2F" aria-pressed="false">2階</button>
+    <button class="tab" data-place="3F" aria-pressed="false">3階</button>
+  </nav>
+  <button class="help icon" id="help" aria-label="操作方法とモデルについて">?</button>
+</header>
+<main>
+<section class="stage" aria-label="住まいの3Dビュー">
+  <img id="photo" src="assets/exterior-day.png" alt="TYPE2の外観（試作レンダリング）">
+  <canvas id="view" tabindex="0" aria-label="3Dビュー。ドラッグで見回し、床をタップで移動できます。" hidden></canvas>
+  <div id="labels" class="labels" aria-hidden="true"></div>
+  <div id="measureLabel" class="measure-label" hidden></div>
+  <div class="loading" id="loading" role="status" hidden>
+    <div class="load-box"><span class="spinner"></span><span id="loadText">3Dを準備しています</span><div class="load-track"><i id="loadBar"></i></div></div>
+  </div>
+  <div id="error" class="error" role="alert" hidden><strong>3Dを表示できませんでした</strong><p>画像でご覧いただけます。</p><button id="fallback">画像を見る</button></div>
+  <div class="scene-heading"><span id="eyebrow">EXTERIOR</span><h1 id="sceneTitle">TYPE02の外観</h1><p id="sceneText">3Dを準備しています。</p></div>
+  <span class="prototype">図面寸法から再現・イメージ</span>
+  <div class="zoom-controls" role="group" aria-label="ズーム"><button id="zoomOut" aria-label="引いて広く見る">−</button><output id="zoomValue" aria-live="polite">—</output><button id="zoomIn" aria-label="拡大する">＋</button><button id="zoomReset">標準</button></div>
+  <div class="stage-actions"><button id="fullscreen" class="glass">全画面</button></div>
+  <div class="tour-progress" id="tourProgress" hidden><span></span></div>
+  <div class="hint" id="hint" aria-live="polite" hidden></div>
+</section>
+<section class="control-panel" aria-label="表示の切り替え">
+  <div class="mode-bar" id="modeBar" role="group" aria-label="表示方法">
+    <button data-mode="walk" aria-pressed="false">歩く</button>
+    <button data-mode="dollhouse" aria-pressed="false">ドールハウス</button>
+    <button data-mode="plan" aria-pressed="false">間取り</button>
+  </div>
+  <div class="tools">
+    <button id="measure" aria-pressed="false">計測</button>
+    <button id="tour" class="primary">自動ツアー ▷</button>
+    <button id="photoBtn" aria-pressed="false">画像</button>
+  </div>
+  <div id="viewPoints" class="view-points" aria-label="見学地点"></div>
+</section>
+<footer><span><b>TYPE02</b> <span id="fact">3階建て・ビルトインガレージ</span></span><button id="details">図面寸法から再現した3Dです <span aria-hidden="true">ⓘ</span></button></footer>
+</main>
+</div>
+<dialog id="info">
+  <div class="dialog-heading"><span>体験のご案内</span><button id="closeInfo" aria-label="閉じる">×</button></div>
+  <h2>気になる場所を、実寸の感覚で。</h2>
+  <dl>
+    <dt>歩く</dt><dd>床をタップ（クリック）するとその位置へ移動します。白い丸は見学地点、金色の丸は階段です。指でなぞる・ドラッグで見回せます。パソコンでは W・A・S・D キーでも歩けます。</dd>
+    <dt>ドールハウス・間取り</dt><dd>天井を外して家全体を俯瞰します。間取りでは部屋ごとの帖数と寸法、1mの目盛りを表示します。部屋をタップすると、その場所から室内を見られます。</dd>
+    <dt>計測</dt><dd>「計測」を押して2点をタップすると、その間の距離（水平・高さ）を表示します。家具の置き場所の検討にお使いください。</dd>
+    <dt>自動ツアー</dt><dd>外観から1階・2階・3階を順に案内します。画面に触れると止まります。</dd>
+  </dl>
+  <div class="model-note">
+    <h3>このモデルについて</h3>
+    <p>公式のTYPE2間取り図を1px＝11.6mm（建物幅4.5モジュール＝4,095mm）で寸法化し、壁・建具・設備を配置した再現モデルです。各部屋の面積は図面の帖数と±6%以内で一致することを自動チェックしています。目線の高さは床から1.5m、標準の画角は人の視野に近い60°（縦）です。</p>
+    <p>天井高は図面の値（1階2.3m・2.25m、2階2.4m、3階2.3m）と、2階・3階東側の勾配天井を反映しています。間取り図に寸法が書かれていないため、壁位置には±10cm程度の誤差があります。窓の高さ、外観の細部、建具の向きは推定です。</p>
+    <p>床・壁・家具などの質感は Poly Haven の CC0（パブリックドメイン）素材を使ったイメージで、実際の仕様・品番・色柄とは異なります。家具・照明は配置の提案です。実際の建物・眺望・日当たりを保証するものではありません。</p>
+    <a href="CREDITS.md" target="_blank" rel="noopener">素材クレジット</a> ・ <a href="https://www.leben-establish.jp/search/lp-koenji-lexsia-terrace/" target="_blank" rel="noopener">物件の公式情報を見る ↗</a>
+  </div>
+  <button id="startExplore" class="primary">体験に戻る</button>
+</dialog>
+</body>
+</html>
