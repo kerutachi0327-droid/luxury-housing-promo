@@ -1,0 +1,36 @@
+{
+  "source": "Poly Haven (https://polyhaven.com) — all assets CC0 1.0 (public domain)",
+  "textureSize": 1024,
+  "webpQuality": 82,
+  "textures": [
+    { "id": "laminate_floor_02", "maps": ["diff", "nor", "arm"], "use": "床フローリング" },
+    { "id": "beige_wall_001", "maps": ["nor", "arm"], "use": "壁・天井クロスの凹凸" },
+    { "id": "large_grey_tiles", "maps": ["diff", "nor", "arm"], "use": "玄関・ポーチのタイル" },
+    { "id": "anti_skid_tiles", "maps": ["diff", "nor", "arm"], "use": "浴室床" },
+    { "id": "long_white_tiles", "maps": ["diff", "nor", "arm"], "use": "浴室壁・キッチンパネル" },
+    { "id": "marble_01", "maps": ["diff", "nor", "arm"], "use": "洗面カウンター" },
+    { "id": "painted_concrete_02", "maps": ["nor", "arm"], "use": "キッチン天板（濃色）" },
+    { "id": "oak_veneer_01", "maps": ["diff", "nor", "arm"], "use": "家具・カウンター" },
+    { "id": "american_walnut_veneer", "maps": ["diff", "nor", "arm"], "use": "建具アクセント" },
+    { "id": "grey_oak_veneer_02", "maps": ["diff", "nor", "arm"], "use": "建具・収納扉" },
+    { "id": "denim_fabric_05", "maps": ["nor", "arm"], "use": "ソファ生地" },
+    { "id": "cotton_jersey", "maps": ["nor", "arm"], "use": "寝具" },
+    { "id": "leather_white", "maps": ["diff", "nor", "arm"], "use": "ダイニングチェア" },
+    { "id": "knitted_fleece", "maps": ["nor", "arm"], "use": "ラグ" },
+    { "id": "concrete_wall_008", "maps": ["nor", "arm"], "use": "外壁（白）" },
+    { "id": "exterior_wall_cladding", "maps": ["diff", "nor", "arm"], "use": "外壁（石調タイル）" },
+    { "id": "painted_metal_shutter", "maps": ["nor", "arm"], "use": "外壁サイディング" },
+    { "id": "large_floor_tiles_02", "maps": ["diff", "nor", "arm"], "use": "駐車場・外構" },
+    { "id": "asphalt_floor", "maps": ["diff", "nor", "arm"], "use": "道路" }
+  ],
+  "models": [
+    { "id": "potted_plant_04", "use": "観葉植物" },
+    { "id": "potted_plant_02", "use": "観葉植物" },
+    { "id": "modern_arm_chair_01", "use": "アームチェア" },
+    { "id": "modern_ceiling_lamp_01", "use": "ペンダント照明" },
+    { "id": "modern_wooden_cabinet", "use": "サイドボード" },
+    { "id": "ceramic_vase_01", "use": "花瓶" },
+    { "id": "standing_picture_frame_01", "use": "フォトフレーム" }
+  ],
+  "hdri": { "id": "kloofendal_48d_partly_cloudy_puresky", "res": "1k", "use": "空・窓外の景色・反射" }
+}
