@@ -146,9 +146,13 @@ function buildOpening(B, floor, w, f, o) {
   const cw = 0.025;
   if (o.kind !== 'entry' && o.kind !== 'bifold') for (const side of [-1, 1]) wallBox(B, `${floor.id}:furn`, 'whiteGloss', f, o.to + 0.08, o.to + 0.15, side * (t / 2) - (side < 0 ? 0.008 : 0), side * (t / 2) + (side > 0 ? 0.008 : 0), base + 1.15, base + 1.27);
   const caseMat = 'doorV';
-  wallBox(B, g, caseMat, f, o.from - cw, o.from, -t / 2 - 0.008, t / 2 + 0.008, base, y1 + cw);
-  wallBox(B, g, caseMat, f, o.to, o.to + cw, -t / 2 - 0.008, t / 2 + 0.008, base, y1 + cw);
-  wallBox(B, g, caseMat, f, o.from - cw, o.to + cw, -t / 2 - 0.008, t / 2 + 0.008, y1, y1 + cw);
+  // The jamb faces stand JAMB proud of the opening (and the posts stop under
+  // the head) so no casing face is coplanar with the wall ends, the soffit or
+  // the skirting ends: coplanar faces z-fight and flicker while walking.
+  const JAMB = 0.003;
+  wallBox(B, g, caseMat, f, o.from - cw, o.from + JAMB, -t / 2 - 0.008, t / 2 + 0.008, base, y1 - JAMB);
+  wallBox(B, g, caseMat, f, o.to - JAMB, o.to + cw, -t / 2 - 0.008, t / 2 + 0.008, base, y1 - JAMB);
+  wallBox(B, g, caseMat, f, o.from - cw, o.to + cw, -t / 2 - 0.008, t / 2 + 0.008, y1 - JAMB, y1 + cw);
   const leafT = 0.036;
   if (o.kind === 'bifold') {
     const n = 4, pw = span / n;
