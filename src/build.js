@@ -72,8 +72,10 @@ function buildWall(B, floor, w, ctx) {
     const nextLevel = floor.id === '3F' ? EXTERIOR.roofTop : LEVEL[floor.id === '1F' ? '2F' : '3F'];
     const skinBottom = floor.id === '1F' ? 0.05 : base;
     // skin up to the ceiling line (kept in the dollhouse cut) + band to the next floor
-    layers.push({ o: ro, y: [skinBottom, top], mat: ctx.facade(floor, w), group: skin, ext: t / 2, skin: true });
-    layers.push({ o: ro, y: [top, nextLevel], mat: ctx.facade(floor, w), group: `${floor.id}:band`, ext: t / 2, skin: true, band: true });
+    // skins stop 2 mm short of the corner so their end faces never sit in the
+    // plane of the neighbouring wall's outer face (coplanar faces flicker)
+    layers.push({ o: ro, y: [skinBottom, top], mat: ctx.facade(floor, w), group: skin, ext: t / 2 - 0.002, skin: true });
+    layers.push({ o: ro, y: [top, nextLevel], mat: ctx.facade(floor, w), group: `${floor.id}:band`, ext: t / 2 - 0.002, skin: true, band: true });
     void inner;
   } else {
     layers.push({ o: [-t / 2, t / 2], y: [base, top], mat: w.mat || 'wall', group: shell, ext: w.h ? 0 : t / 2 });
@@ -83,7 +85,8 @@ function buildWall(B, floor, w, ctx) {
     const s0 = f.s0 - L.ext, s1 = f.s1 + L.ext;
     if (L.band) { wallBox(B, L.group, L.mat, f, s0, s1, L.o[0], L.o[1], L.y[0], L.y[1]); continue; }
     // dark cap on the cut line (reads like a section drawing in dollhouse / plan)
-    wallBox(B, `${floor.id}:caps`, 'cap', f, s0, s1, L.o[0], L.o[1], L.y[1], L.y[1] + 0.006);
+    // (1 mm wider than the wall so its sides are not coplanar with the wall faces)
+    wallBox(B, `${floor.id}:caps`, 'cap', f, s0 - 0.001, s1 + 0.001, L.o[0] - 0.001, L.o[1] + 0.001, L.y[1], L.y[1] + 0.006);
     let cur = s0;
     for (const o of ops) {
       wallBox(B, L.group, L.mat, f, cur, o.from, L.o[0], L.o[1], L.y[0], L.y[1]);
@@ -312,25 +315,28 @@ function buildExterior(B, mats, models) {
   B.add('site', 'ground', quad(W, f2, site.east, site.south, 0.055));
   // garage piers (stone) and the 2F overhang soffit
   const pier = 0.32;
-  B.box(g, 'extStone', 0, 0.05, gz1, pier, L2 - SLAB, gz1 + 0.9);
-  B.box(g, 'extStone', W - pier, 0.05, gz1, W, L2 - SLAB, gz1 + 0.9);
+  // facings that sit on the building outline stand 3 mm proud (P) so they never
+  // share a plane with the wall skins or each other (z-fighting flicker)
+  const P = 0.003;
+  B.box(g, 'extStone', -P, 0.05, gz1, pier, L2 - SLAB, gz1 + 0.9);
+  B.box(g, 'extStone', W - pier, 0.05, gz1, W + P, L2 - SLAB, gz1 + 0.9);
   B.box(g, 'extWhite', 0, 0.05, gz1 + 0.9, 0.12, L2 - SLAB, -7.64);
   B.box(g, 'extWhite', W - 0.16, 0.05, gz1 + 0.9, W, L2 - SLAB, -7.64);
   B.box(g, 'white', 0, L2 - SLAB, f2, W, L2 - SLAB + 0.02, -7.6); // soffit
   B.box(g, 'frame', 0.25, L2 - SLAB - 0.32, f2 + 0.02, W - 0.25, L2 - SLAB, f2 + 0.12); // shutter box
   for (const x of [1.4, 2.8]) { const d = cylinder(0.06, 0.06, 0.01); d.translate(x, L2 - SLAB - 0.012, -9); B.add(g, 'downlight', d); }
   // 2F overhang slab edge + band
-  B.box(g, 'extWhite', 0, L2 - SLAB, f2, W, L2, f2 + 0.16);
+  B.box(g, 'extWhite', -P, L2 - SLAB - P, f2 - P, W + P, L2, f2 + 0.16);
   // porch: two steps up to the entrance
   const [px1, pz1, px2, pz2] = EXTERIOR.porch;
   B.box(g, 'tileGenkan', px1, 0.05, pz1 + 0.22, px2, L1 - 0.17, pz2);
   B.box(g, 'tileGenkan', px1, 0.05, pz1, px2, 0.2, pz1 + 0.22);
   B.box(g, 'tileGenkan', px1, 0.05, pz1 + 0.22, px2, L1, pz2);
   // 2F front: stone side panels over the siding
-  B.box('2F:ext', 'extStone', 0, L2 - SLAB + 0.05, f2 - 0.03, 0.72, L3 - 0.05, f2 + 0.02);
-  B.box('2F:ext', 'extStone', W - 0.72, L2 - SLAB + 0.05, f2 - 0.03, W, L3 - 0.05, f2 + 0.02);
+  B.box('2F:ext', 'extStone', -P, L2 - SLAB + 0.05, f2 - 0.03, 0.72, L3 - 0.05, f2 + 0.02);
+  B.box('2F:ext', 'extStone', W - 0.72, L2 - SLAB + 0.05, f2 - 0.03, W + P, L3 - 0.05, f2 + 0.02);
   // 3F front balcony parapet (stone band) + glass railing
-  B.box('3F:ext', 'extStone', 0, L3 - 0.05, f2 - 0.02, W, L3 + 0.45, f2 + 0.14);
+  B.box('3F:ext', 'extStone', -P, L3 - 0.05, f2 - 0.02 - P, W + P, L3 + 0.45 + P, f2 + 0.14);
   for (const [x1, x2] of [[0, 0.14], [w3 - 0.0, W]]) B.box('3F:ext', 'extWhite', x1, L3 - 0.05, f2, x2, L3 + 0.45, f3);
   // roofs: 3F flat roof with eave, 2F east strip shed roof
   B.box('roof', 'extWhite', -0.05, EXTERIOR.roofTop, f2 - 0.05, w3 + 0.25, EXTERIOR.roofTop + 0.14, 0.15);
@@ -341,7 +347,7 @@ function buildExterior(B, mats, models) {
   shed.setAttribute('position', new THREE.Float32BufferAttribute([w3, y0, f3, W + 0.15, y1, f3, W + 0.15, y1, 0.15, w3, y0, 0.15], 3));
   shed.setIndex([0, 2, 1, 0, 3, 2]); shed.computeVertexNormals(); metricUV(shed);
   B.add('roof', 'darkGrey', shed);
-  B.box('roof', 'darkGrey', w3, L3 - 0.05, f2, W, L3 + 0.0, f3);
+  B.box('roof', 'darkGrey', w3 + 0.001, L3 - 0.049, f2 + 0.001, W - 0.001, L3 - 0.001, f3 - 0.001); // inset: sits inside the white block above
   // gate posts, mailbox, fence planting
   B.box('site', 'darkGrey', site.west + 0.05, 0.05, site.north + 0.15, site.west + 0.35, 1.35, site.north + 0.45);
   B.box('site', 'steel', site.west + 0.08, 0.95, site.north + 0.14, site.west + 0.32, 1.1, site.north + 0.16);
