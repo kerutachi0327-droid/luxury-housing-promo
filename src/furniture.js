@@ -252,7 +252,8 @@ export function addFurniture(B, floor, it, blocked, models) {
         [P(w + 0.04, 0.24, len + 0.04, 0, 0.05, 0, { radius: 0.01 }), 'oak'],
         [P(w, 0.2, len, 0, 0.29, 0, { radius: 0.05 }), 'bedding'],
         [P(w + 0.02, 0.06, len * 0.68, 0, 0.47, len * 0.15, { radius: 0.03 }), 'bedding'],
-        [P(w + 0.04, 0.03, 0.5, 0, 0.5, len * 0.32, { radius: 0.01 }), 'beddingAccent'],
+        // runner sits 5 mm proud of the duvet top (0.53) to avoid z-fighting
+        [P(w + 0.04, 0.03, 0.5, 0, 0.505, len * 0.32, { radius: 0.01 }), 'beddingAccent'],
         [P(0.5, 0.12, 0.34, -w / 4 - 0.01, 0.49, -len / 2 + 0.25, { radius: 0.05 }), 'bedding'],
         [P(0.5, 0.12, 0.34, w / 4 + 0.01, 0.49, -len / 2 + 0.25, { radius: 0.05 }), 'bedding'],
         [P(w + 0.12, 0.95, 0.06, 0, 0.05, -len / 2 - 0.05, { radius: 0.02 }), fabricMat(B, '#cfc6b8')],
