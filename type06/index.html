@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#14222a">
+<meta name="description" content="高円寺 TYPE6を、図面寸法を基にした3Dで歩いて体験できるご案内用プレビュー。">
+<title>TYPE06｜高円寺 住まい体験</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='5' fill='%2314222a'/%3E%3Cpath d='M8 25V7h16v18M13 11h6m-6 6h6m-6 6h6' fill='none' stroke='%23d6b58b' stroke-width='2'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="style.css">
+<script type="module" src="dist/app.js"></script>
+</head>
+<body>
+<div class="app">
+<header>
+  <a class="brand" href="#" aria-label="外観に戻る"><span class="mark">06</span><span><strong>高円寺</strong><small>TYPE 06 · RESIDENCE</small></span></a>
+  <nav aria-label="見る場所">
+    <button class="tab active" data-place="exterior" aria-pressed="true">外観</button>
+    <button class="tab" data-place="1F" aria-pressed="false">1階</button>
+    <button class="tab" data-place="2F" aria-pressed="false">2階</button>
+    <button class="tab" data-place="3F" aria-pressed="false">3階</button>
+  </nav>
+  <button class="help icon" id="help" aria-label="操作方法とモデルについて">?</button>
+</header>
+<main>
+<section class="stage" aria-label="住まいの3Dビュー">
+  <img id="photo" src="assets/t6-exterior.jpg" alt="TYPE6の外観（3Dモデルから書き出したイメージ）">
+  <canvas id="view" tabindex="0" aria-label="3Dビュー。ドラッグで見回し、床をタップで移動できます。" hidden></canvas>
+  <div id="labels" class="labels" aria-hidden="true"></div>
+  <div id="measureLabel" class="measure-label" hidden></div>
+  <div class="loading" id="loading" role="status" hidden>
+    <div class="load-box"><span class="spinner"></span><span id="loadText">3Dを準備しています</span><div class="load-track"><i id="loadBar"></i></div></div>
+  </div>
+  <div id="error" class="error" role="alert" hidden><strong>3Dを表示できませんでした</strong><p>画像でご覧いただけます。</p><button id="fallback">画像を見る</button></div>
+  <div class="scene-heading"><span id="eyebrow">EXTERIOR</span><h1 id="sceneTitle">TYPE06の外観</h1><p id="sceneText">3Dを準備しています。</p></div>
+  <span class="prototype">図面寸法から再現・イメージ</span>
+  <div class="zoom-controls" role="group" aria-label="ズーム"><button id="zoomOut" aria-label="引いて広く見る">−</button><output id="zoomValue" aria-live="polite">—</output><button id="zoomIn" aria-label="拡大する">＋</button><button id="zoomReset">標準</button></div>
+  <div class="stage-actions"><button id="fullscreen" class="glass">全画面</button></div>
+  <div class="tour-progress" id="tourProgress" hidden><span></span></div>
+  <div class="hint" id="hint" aria-live="polite" hidden></div>
+</section>
+<section class="control-panel" aria-label="表示の切り替え">
+  <div class="mode-bar" id="modeBar" role="group" aria-label="表示方法">
+    <button data-mode="walk" aria-pressed="false">歩く</button>
+    <button data-mode="dollhouse" aria-pressed="false">ドールハウス</button>
+    <button data-mode="plan" aria-pressed="false">間取り</button>
+  </div>
+  <div class="tools">
+    <button id="measure" aria-pressed="false">計測</button>
+    <button id="tour" class="primary">自動ツアー ▷</button>
+    <button id="photoBtn" aria-pressed="false">画像</button>
+  </div>
+  <div id="viewPoints" class="view-points" aria-label="見学地点"></div>
+</section>
+<footer><span><b>TYPE06</b> <span id="fact">3階建て・ビルトインガレージ・東側玄関</span></span><button id="details">非公式の参考イメージ（作成：Atlink）ⓘ</button></footer>
+</main>
+</div>
+<dialog id="info">
+  <div class="dialog-heading"><span>体験のご案内</span><button id="closeInfo" aria-label="閉じる">×</button></div>
+  <h2>気になる場所を、実寸の感覚で。</h2>
+  <dl>
+    <dt>歩く</dt><dd>床をタップ（クリック）するとその位置へ移動します。白い丸は見学地点、金色の丸は階段です。指でなぞる・ドラッグで見回せます。パソコンでは W・A・S・D キーでも歩けます。</dd>
+    <dt>ドールハウス・間取り</dt><dd>天井を外して家全体を俯瞰します。間取りでは部屋ごとの帖数と寸法、1mの目盛りを表示します。部屋をタップすると、その場所から室内を見られます。</dd>
+    <dt>計測</dt><dd>「計測」を押して2点をタップすると、その間の距離（水平・高さ）を表示します。家具の置き場所の検討にお使いください。</dd>
+    <dt>自動ツアー</dt><dd>外観から1階・2階・3階を順に案内します。画面に触れると止まります。</dd>
+  </dl>
+  <div class="model-note">
+    <h3>このモデルについて</h3>
+    <p><strong>本ページはAtlinkが作成した非公式の参考イメージです。販売元・売主の公式コンテンツではありません。</strong></p>
+    <p>公式のTYPE6間取り図（3LDK+SIC+2WIC、敷地80.15㎡・延床120.89㎡）には寸法線がないため、車庫面積18.21㎡と各階床面積から縮尺（約40.5px＝1m）を求め、0.5mの目盛りを重ねて壁芯を読み取った再現モデルです。LDK21.0帖（パントリー含む）・洋室1 5.1帖・洋室2 5.1帖・主寝室7.6帖と、各階の床面積が図面と±8%以内で一致することを照合済みです。目線の高さは床から1.5mです。</p>
+    <p>天井高は図面の表記（1階2.3m、2階LDK2.35m・洋室2 2.4m、3階2.3m）と、パントリー・洋室2・3階北側の勾配天井を反映しています。壁位置には10〜30cm程度の誤差があります。階段の形（回り階段）、窓の高さ、外観の色・素材、屋根形状は推定です。</p>
+    <p>床・壁・家具などの質感は Poly Haven の CC0（パブリックドメイン）素材を使ったイメージで、実際の仕様・品番・色柄とは異なります。家具・照明は配置の提案です。実際の建物・眺望・日当たりを保証するものではありません。</p>
+    <a href="CREDITS.md" target="_blank" rel="noopener">素材クレジット</a> ・ <a href="https://www.leben-establish.jp/search/lp-koenji-lexsia-terrace/" target="_blank" rel="noopener">物件の公式情報を見る ↗</a>
+  </div>
+  <button id="startExplore" class="primary">体験に戻る</button>
+</dialog>
+</body>
+</html>

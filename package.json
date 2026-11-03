@@ -5,7 +5,9 @@
   "scripts": {
     "check": "node tools/check-plan.mjs",
     "build": "esbuild src/main.js --bundle --minify --format=esm --target=es2020 --outfile=dist/app.js",
-    "assets": "node tools/fetch-assets.mjs"
+    "assets": "node tools/fetch-assets.mjs",
+    "build:type06": "esbuild type06/src/main.js --bundle --minify --format=esm --target=es2020 --outfile=type06/dist/app.js",
+    "check:type06": "node type06/tools/check-plan.mjs"
   },
   "devDependencies": {
     "@gltf-transform/cli": "4.2.1",
