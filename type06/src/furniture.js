@@ -120,7 +120,7 @@ export function addBuiltIn(B, floor, b, blocked, models) {
       box('black', x1 + 0.03, L, z1 + 0.04, x2 - 0.03, L + 0.08, z2 - 0.06);
       box('counterDark', x1 - 0.02, L + 0.85, z1 - 0.02, x2 + 0.02, L + 0.88, z2 + 0.02);
       for (const yy of [0.33, 0.6]) box('black', x1 + 0.01, L + yy, z1 - 0.002, x2 - 0.01, L + yy + 0.006, z1);
-      box('oak', x1, L + 0.08, z2 - 0.02, x2, L + 0.849, z2); // LDK-side panel
+      box('stoneDark', x1, L + 0.08, z2 - 0.02, x2, L + 0.849, z2); // LDK-side dark stone panel
       const [sx, sz] = b.sink;
       box('steel', sx - 0.38, L + 0.70, sz - 0.2, sx + 0.38, L + 0.881, sz + 0.2);
       box('darkGrey', sx - 0.36, L + 0.72, sz - 0.18, sx + 0.36, L + 0.882, sz + 0.18);
@@ -154,16 +154,30 @@ export function addBuiltIn(B, floor, b, blocked, models) {
       blocked.push([x1, z1, x2, z2 + 0.05]);
       return;
     }
-    case 'vanityW': { // two-bowl vanity against a west wall
+    case 'vanityW': { // two-bowl vanity against a west wall (dark wood, black stone top)
       const [x1, z1, x2, z2] = r;
-      box('white', x1, L + 0.12, z1, x2, L + 0.8, z2);
-      box('marble', x1, L + 0.8, z1, x2 + 0.02, L + 0.83, z2);
+      box('kitchenFront', x1, L + 0.12, z1, x2, L + 0.8, z2);
+      box('counterDark', x1, L + 0.8, z1, x2 + 0.02, L + 0.83, z2);
       for (const bz of [z1 + (z2 - z1) * 0.27, z1 + (z2 - z1) * 0.73]) {
         const bowl = cylinder(0.19, 0.16, 0.12, 32); bowl.scale(1.2, 1, 1); bowl.translate((x1 + x2) / 2 + 0.03, L + 0.75, bz); B.add(g, 'porcelain', bowl);
         const tap = cylinder(0.014, 0.016, 0.22); tap.translate(x1 + 0.08, L + 0.83, bz); B.add(g, 'steel', tap);
       }
-      if (b.mirror) { box('white', x1, L + 1.05, z1, x1 + 0.13, L + 1.95, z2); box('mirror', x1 + 0.128, L + 1.1, z1 + 0.02, x1 + 0.132, L + 1.9, z2 - 0.02); box('lampShade', x1 + 0.05, L + 1.95, z1, x1 + 0.13, L + 1.98, z2); }
+      if (b.mirror) { box('mirror', x1 + 0.09, L + 1.0, z1 + 0.02, x1 + 0.1, L + 2.0, z2 - 0.02); box('cove', x1 + 0.09, L + 1.0, z1 - 0.012, x1 + 0.104, L + 2.0, z1 + 0.018); box('cove', x1 + 0.09, L + 1.0, z2 - 0.018, x1 + 0.104, L + 2.0, z2 + 0.012); }
       blocked.push([x1, z1, x2 + 0.05, z2]);
+      return;
+    }
+    case 'panel': { // accent finish on a wall face: rect is the panel's own thin box
+      const [x1, z1, x2, z2] = r;
+      box(b.mat, x1, L + (b.y0 ?? 0), z1, x2, L + (b.y1 ?? 2.3), z2);
+      return;
+    }
+    case 'cove': { // indirect light line along the top of the walls of a room
+      // 3 mm clear of the wall faces so no strip face lies in a wall's plane
+      const [x1, z1, x2, z2] = [r[0] + 0.003, r[1] + 0.003, r[2] - 0.003, r[3] - 0.003], y = L + b.h - 0.006, d = 0.03;
+      box('cove', x1, y - 0.03, z1, x2, y, z1 + d);
+      box('cove', x1, y - 0.03, z2 - d, x2, y, z2);
+      box('cove', x1, y - 0.03, z1 + d, x1 + d, y, z2 - d);
+      box('cove', x2 - d, y - 0.03, z1 + d, x2, y, z2 - d);
       return;
     }
     case 'fridge': {
@@ -215,11 +229,12 @@ export function addBuiltIn(B, floor, b, blocked, models) {
     }
     case 'bathtub': {
       const [x1, z1, x2, z2] = r;
-      box('porcelain', x1, L, z1, x2, L + 0.55, z1 + 0.05);
-      box('porcelain', x1, L, z2 - 0.05, x2, L + 0.55, z2);
-      box('porcelain', x1, L, z1, x1 + 0.05, L + 0.55, z2);
-      box('porcelain', x2 - 0.05, L, z1, x2, L + 0.55, z2);
-      box('porcelain', x1 + 0.05, L, z1 + 0.05, x2 - 0.05, L + 0.12, z2 - 0.05);
+      const tm = b.color === 'black' ? 'blackGloss' : 'porcelain';
+      box(tm, x1, L, z1, x2, L + 0.55, z1 + 0.05);
+      box(tm, x1, L, z2 - 0.05, x2, L + 0.55, z2);
+      box(tm, x1, L, z1 + 0.05, x1 + 0.05, L + 0.55, z2 - 0.05);
+      box(tm, x2 - 0.05, L, z1 + 0.05, x2, L + 0.55, z2 - 0.05);
+      box(tm, x1 + 0.05, L, z1 + 0.05, x2 - 0.05, L + 0.12, z2 - 0.05);
       // wall panels of the unit bath + lower ceiling
       const room = floor.rooms.find(rm => rm.name === '浴室');
       if (room) {
@@ -419,6 +434,18 @@ export function addFurniture(B, floor, it, blocked, models) {
         const shade = cylinder(0.16, 0.16, 0.14, 32); shade.translate(x, cy - 0.85, z); B.add(g, 'lampShade', shade);
       }
       const cord = cylinder(0.004, 0.004, 0.6, 6); cord.translate(x, cy - 0.6, z); B.add(g, 'black', cord);
+      return;
+    }
+    case 'globeCluster': { // brass bar pendant with five opal globes
+      const top = L + (floor.ceilingAt ? floor.ceilingAt(x, z) : 2.35);
+      const w = it.w || 1.0, c = Math.cos(rot), sn = Math.sin(rot);
+      for (const dx of [-w / 2 + 0.04, w / 2 - 0.04]) B.box(g, 'brass', x + dx * c - 0.004, top - 0.55, z - dx * sn - 0.004, x + dx * c + 0.004, top, z - dx * sn + 0.004);
+      const bar = block(w, 0.025, 0.025, { base: false }); bar.rotateY(rot); bar.translate(x, top - 0.55, z); B.add(g, 'brass', bar);
+      [-0.4, -0.2, 0, 0.2, 0.4].forEach((k, i) => {
+        const dx = k * w, dy = i % 2 ? -0.12 : -0.05;
+        const s = new THREE.SphereGeometry(0.085, 24, 16); s.translate(x + dx * c, top - 0.55 + dy - 0.07, z - dx * sn); B.add(g, 'globe', s);
+        B.box(g, 'brass', x + dx * c - 0.005, top - 0.55 + dy, z - dx * sn - 0.005, x + dx * c + 0.005, top - 0.55, z - dx * sn + 0.005);
+      });
       return;
     }
     case 'model': {

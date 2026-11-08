@@ -9,7 +9,7 @@ import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment
 import { HDRLoader } from 'three/examples/jsm/loaders/HDRLoader.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { FLOORS, LEVEL, EXTERIOR, JO, roomArea } from './plan.js';
-import { materials, loadManifest, getManifest, setAnisotropy, trackProgress } from '../../src/materials.js';
+import { materials, loadManifest, getManifest, setAnisotropy, trackProgress } from './materials.js';
 import { buildHouse, inside, ceilingAt } from './build.js';
 
 const $ = id => document.getElementById(id);

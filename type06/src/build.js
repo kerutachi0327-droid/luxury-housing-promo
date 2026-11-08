@@ -196,26 +196,16 @@ function buildOpening(B, floor, w, f, o) {
   for (const [geo, mt] of [[leaf, mat], [handle, 'steel'], [handle2, 'steel']]) { geo.applyMatrix4(m); B.add(`${floor.id}:furn`, mt, geo); }
 }
 
-// gathered drapes on both sides of a window (room side)
+// horizontal venetian blind on the room side, raised to the top third
+// (slats stop 1 cm inside the reveal; they never share a plane with the wall)
 function addCurtains(B, floor, f, o, sg, t) {
-  const base = floor.level;
-  const face = -sg * (t / 2) - sg * 0.09; // 9cm into the room
-  const top = base + Math.min(o.head + 0.1, (floor.ceiling || 2.4) - 0.02);
-  const bottom = o.sill < 0.05 ? base + 0.01 : base + o.sill - 0.12;
-  const h = top - bottom, pw = 0.24;
-  for (const [s0, dir] of [[o.from - 0.12, 1], [o.to + 0.12 - pw, -1]]) {
-    const g = new THREE.PlaneGeometry(pw, h, 16, 1);
-    const p = g.attributes.position;
-    for (let i = 0; i < p.count; i++) p.setZ(i, Math.sin((p.getX(i) + pw / 2) / pw * Math.PI * 5) * 0.035);
-    g.computeVertexNormals(); metricUV(g);
-    g.translate(pw / 2, h / 2, 0);
-    if (f.vertical) { g.rotateY(Math.PI / 2); g.translate(f.c + face, bottom, s0 + pw); }
-    else g.translate(s0, bottom, f.c + face);
-    B.add(`${floor.id}:furn`, 'curtain', g);
-    void dir;
-  }
-  // rail
-  wallBox(B, `${floor.id}:furn`, 'white', f, o.from - 0.15, o.to + 0.15, Math.min(face, face + sg * 0.04) - 0.02, Math.max(face, face + sg * 0.04) + 0.02, top, top + 0.04);
+  const base = floor.level, g = `${floor.id}:furn`;
+  const face = -sg * (t / 2) - sg * 0.035;
+  const top = base + o.head - 0.01, bottom = base + o.sill + (o.head - o.sill) * 0.62;
+  const o0 = Math.min(face, face - sg * 0.025), o1 = Math.max(face, face - sg * 0.025);
+  wallBox(B, g, 'blind', f, o.from - 0.02, o.to + 0.02, o0 - 0.006, o1 + 0.006, top - 0.045, top); // head rail
+  for (let y = top - 0.07; y > bottom; y -= 0.035) wallBox(B, g, 'blind', f, o.from - 0.015, o.to + 0.015, o0, o1, y - 0.004, y);
+  wallBox(B, g, 'blind', f, o.from - 0.015, o.to + 0.015, o0 - 0.004, o1 + 0.004, bottom - 0.02, bottom); // bottom rail
 }
 
 // ---- floors, ceilings ----------------------------------------------------
@@ -309,10 +299,10 @@ function buildStairs(B, floor, s) {
 
 // ---- exterior -------------------------------------------------------------
 function facadeMaterial(floor, w) {
-  // road sides (north 6 m / east 4 m): metal siding on 2F and the 3F front
-  if (floor.id === '2F' && (w.outside === 'N' || w.outside === 'E')) return 'extSiding';
-  if (floor.id === '3F' && w.outside === 'N') return 'extSiding';
-  return 'extWhite';
+  // model-home finish: mid-grey siding on the 1F/2F body, light grey on 3F
+  // (the dark stone-tile corner is added as cladding in buildExterior)
+  void w;
+  return floor.id === '3F' ? 'extLight' : 'extSiding';
 }
 
 function slopedRoof(x1, x2, zLo, zHi, yLo, yHi) {
@@ -347,8 +337,8 @@ function buildExterior(B, mats, models) {
 
   // ---- built-in garage under 2F: soffit, north beam with shutter box, piers
   const soffitY = L2 - SLAB;
-  B.box('2F:ext', 'white', X(0.9), soffitY - 0.004, Z(0) + 0.16, X(6.4) - 0.16, soffitY + 0.02, gz2 - 0.081);
-  B.box('2F:ext', 'white', X(0.4), soffitY - 0.004, Z(2.6), X(0.9) - 0.001, soffitY + 0.02, gz2 - 0.081);
+  B.box('2F:ext', 'walnut', X(0.9), soffitY - 0.004, Z(0) + 0.16, X(6.4) - 0.16, soffitY + 0.02, gz2 - 0.081);
+  B.box('2F:ext', 'walnut', X(0.4), soffitY - 0.004, Z(2.6), X(0.9) - 0.001, soffitY + 0.02, gz2 - 0.081);
   B.box('2F:ext', 'extWhite', X(0.9) - P, soffitY - 0.32, Z(0) - P, X(6.4) + P, L2 + 0.002, Z(0) + 0.16); // beam / 2F floor edge
   B.box('2F:ext', 'frame', X(1.4), soffitY - 0.3, Z(0) + 0.16, X(6.1), soffitY - 0.002, Z(0) + 0.3);       // shutter box
   B.box(g, 'extStone', X(5.95), 0.05, Z(0) - P, X(6.4) + P, soffitY - 0.32, Z(1.0));                 // NE stone pier
@@ -385,15 +375,29 @@ function buildExterior(B, mats, models) {
   const shape = new THREE.Shape(pts.map(([x, z]) => new THREE.Vector2(x, -z)));
   const roof = new THREE.ExtrudeGeometry(shape, { depth: 0.16, bevelEnabled: false });
   roof.rotateX(-Math.PI / 2); roof.translate(0, EXTERIOR.roofTop, 0); metricUV(roof);
-  B.add('roof', 'extWhite', roof);
+  B.add('roof', 'darkGrey', roof);
   const cap = new THREE.ExtrudeGeometry(shape, { depth: 0.012, bevelEnabled: false });
   cap.rotateX(-Math.PI / 2); cap.translate(0, EXTERIOR.roofTop + 0.16, 0); metricUV(cap);
-  B.add('roof', 'darkGrey', cap);
+  B.add('roof', 'black', cap);
 
+  // ---- dark stone-tile corner on the road corner (2F north + east faces), 2.5 cm proud of the skin
+  const sk = 0.084; // skin outer face offset from the wall centre line
+  B.box('2F:ext', 'extStone', X(4.55), soffitY - 0.32, Z(0) - sk - 0.026, X(6.4) + sk + 0.026, L3 + 0.004, Z(0) - sk - 0.004);
+  B.box('2F:ext', 'extStone', X(6.4) + sk + 0.004, soffitY - 0.32, Z(0) - sk - 0.004, X(6.4) + sk + 0.026, L3 + 0.004, Z(1.3));
+  // ---- dark timber-look vertical louvre fences (east of the bedroom, west side)
+  const louvre = (x1, z1, x2, z2, h) => {
+    const alongX = Math.abs(x2 - x1) > Math.abs(z2 - z1), len = alongX ? x2 - x1 : z2 - z1;
+    for (let s = 0.02; s < len - 0.02; s += 0.1) {
+      if (alongX) B.box('site', 'fenceWood', x1 + s, 0.05, z1 - 0.02, x1 + s + 0.045, h, z1 + 0.02);
+      else B.box('site', 'fenceWood', x1 - 0.02, 0.05, z1 + s, x1 + 0.02, h, z1 + s + 0.045);
+    }
+    B.box('site', 'frame', Math.min(x1, x2) - 0.025, h, Math.min(z1, z2) - 0.025, Math.max(x1, x2) + 0.025, h + 0.03, Math.max(z1, z2) + 0.025);
+  };
+  louvre(X(6.75), Z(6.95), X(6.75), Z(9.0) + 0.6, 1.6);
+  louvre(X(-0.85), Z(0.4), X(-0.85), Z(7.2), 1.6);
   // ---- gate, planting
   placeModel(B, 'site', models, 'potted_plant_04', px2 + 0.4, 0.05, pz1 - 0.4, 0, 1.0);
   placeModel(B, 'site', models, 'potted_plant_02', X(0.2), 0.05, Z(0.25), 0, 1.0);
-  B.box('site', 'walnut', X(-0.85), 0.05, Z(2.4), X(-0.8), 1.8, Z(7.0)); // timber screen to the west neighbour
 
   // ---- neighbours (part of the 6-house development): west and south blocks
   for (const [x1, z1, x2, z2, h] of [[-9.5, Z(0) - 0.4, X(-0.9) - 0.5, Z(9.0) + 0.6, 7.9], [X(-0.9), Z(9.0) + 1.4, roadE0 - 0.6, Z(9.0) + 9.5, 8.6]]) {

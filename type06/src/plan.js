@@ -100,13 +100,21 @@ function floorDef(id, label, ceiling, roomsRaw, openingsRaw, extra) {
   return { id, label, level: LEVEL[id], ceiling, footprint, walls, rooms, ...extra };
 }
 
+
+// accent finish on one face of a wall (raw wall line c; side +1 = the +x/+z face)
+const panel = (axis, c, side, a, b, mat, t, y0 = 0, y1 = 2.3) => {
+  const f0 = side * t / 2 + (side > 0 ? 0.001 : -0.013), f1 = f0 + 0.012;
+  return { type: 'panel', mat, y0, y1, rect: axis === 'x' ? [X(c) + f0, Z(a), X(c) + f1, Z(b)] : [X(a), Z(c) + f0, X(b), Z(c) + f1] };
+};
+const cove = (x1, z1, x2, z2, h, inset = [0.08, 0.05, 0.08, 0.08]) => ({ type: 'cove', h, rect: [X(x1) + inset[0], Z(z1) + inset[1], X(x2) - inset[2], Z(z2) - inset[3]] });
+
 // ---------------------------------------------------------------- 1F
 const S = R(...STAIR);
 const first = floorDef('1F', '1階', 2.3, [
   room('ガレージ', [[0.4, 0.3, 6.2, 3.35]], { kind: 'open' }),
-  room('トイレ', [[0, 3.35, 1.9, 4.3]], { floor: 'cushionFloor' }),
+  room('トイレ', [[0, 3.35, 1.9, 4.3]], { floor: 'tileGenkan' }),
   room('ホール', [[1.9, 4.4, 2.9, 5.3], [1.9, 3.35, 4.7, 4.4], [1.9, 5.3, 3.4, 6.8]]),
-  room('洗面室', [[0, 4.3, 1.9, 7.4]], { floor: 'cushionFloor' }),
+  room('洗面室', [[0, 4.3, 1.9, 7.4]], { floor: 'tileGenkan' }),
   room('浴室', [[-0.45, 7.4, 1.9, 9.0]], { floor: 'tileBath', wall: 'bathPanel' }),
   room('SIC', [[2.9, 4.4, 4.7, 5.3]], { floor: 'tileGenkan' }),
   room('玄関', [[3.4, 5.3, 4.7, 6.8]], { floor: 'tileGenkan', drop: 0.15 }),
@@ -135,7 +143,10 @@ const first = floorDef('1F', '1階', 2.3, [
     { type: 'vanityW', rect: R(0.0, 4.5, 0.6, 5.7), mirror: true },
     { type: 'washer', rect: R(0.05, 6.55, 0.7, 7.3) },
     { type: 'shelf', rect: R(1.4, 6.9, 1.85, 7.35), h: 1.8 },
-    { type: 'bathtub', rect: R(-0.4, 7.45, 0.45, 9.0) },
+    { type: 'bathtub', rect: R(-0.4, 7.45, 0.45, 9.0), color: 'black' },
+    panel('z', 6.8, -1, 3.45, 4.65, 'tileGenkan', 0.10, -0.15, 2.3),
+    panel('x', 0, 1, 3.4, 4.25, 'stoneDark', 0.16),
+    panel('x', 1.9, 1, 7.3, 8.6, 'tile3D', 0.10),
     { type: 'shoeCabinet', rect: R(2.95, 4.45, 4.65, 4.85), h: 2.0, facing: 'S' },
     { type: 'closet', rect: R(5.25, 6.85, 6.15, 7.55), h: 2.3, facing: 'W', hidden: true },
     { type: 'step', rect: R(3.36, 5.3, 3.44, 6.8) },
@@ -190,6 +201,10 @@ const second = floorDef('2F', '2階', 2.4, [
     { rect: R(4.7, 4.7, 5.6, 5.4), dir: 'west', from: 0.19 * 9, to: LEVEL['3F'] - LEVEL['2F'], steps: 6 },
   ],
   built: [
+    panel('z', 5.4, 1, 4.75, 5.75, 'stoneDark', 0.10, 0, 2.35),
+    panel('z', 2.6, 1, 0.9, 2.3, 'backsplash', 0.10, 0.88, 1.5),
+    panel('z', 0, 1, 5.3, 6.3, 'tile3D', 0.16, 0, 1.5),
+    cove(0, 5.4, 5.8, 9.0, 2.35, [0.08, 0.05, 0.05, 0.08]),
     { type: 'peninsula', rect: R(0.1, 4.6, 2.8, 5.3), sink: [X(2.15), Z(4.95)], cooktop: [X(0.7), Z(4.95)] },
     { type: 'fridge2', rect: R(0.08, 2.72, 0.75, 3.3), h: 1.82 },
     { type: 'backCounter', rect: R(0.8, 2.72, 2.3, 3.3) },
@@ -213,7 +228,7 @@ const second = floorDef('2F', '2階', 2.4, [
     { type: 'diningChair', at: [X(0.75), Z(6.95)], rot: Math.PI / 2 },
     { type: 'diningChair', at: [X(1.85), Z(6.25)], rot: -Math.PI / 2 },
     { type: 'diningChair', at: [X(1.85), Z(6.95)], rot: -Math.PI / 2 },
-    { type: 'pendant', at: [X(1.3), Z(6.6)], model: 'modern_ceiling_lamp_01' },
+    { type: 'globeCluster', at: [X(1.3), Z(6.6)], rot: Math.PI / 2, w: 1.0 },
     { type: 'stool', at: [X(2.45), Z(5.6)] },
     { type: 'model', id: 'potted_plant_02', at: [X(-0.15), Z(8.75)], scale: 0.75 },
     { type: 'bed', size: 'single', at: [X(5.8), Z(1.1)], rot: 0 },
@@ -237,14 +252,14 @@ const second = floorDef('2F', '2階', 2.4, [
 // ---------------------------------------------------------------- 3F
 const third = floorDef('3F', '3階', 2.3, [
   room('WIC', [[0.9, 4.4, 2.9, 6.3]], { ceiling: 2.3 }),
-  room('トイレ', [[2.9, 4.4, 3.8, 6.3]], { floor: 'cushionFloor' }),
+  room('トイレ', [[2.9, 4.4, 3.8, 6.3]], { floor: 'tileGenkan' }),
   room('ホール', [[3.8, 4.4, 4.7, 6.3], [4.7, 5.4, 4.8, 6.3]]),
   room('階段', [STAIR], { kind: 'stair', hide: true }),
   room('主寝室', [[0, 6.3, 4.8, 9.0]], { jo: 7.6, ceiling: 2.3 }),
   room('バルコニー', [[4.8, 5.4, 5.9, 9.0]], { kind: 'balcony' }),
 ], [
   open('x', 4.7, 4.4, 5.4), door('z', 6.3, 3.85, 4.6, { swing: 1 }), door('z', 6.3, 1.4, 2.2), door('x', 3.8, 5.4, 6.1, { open: 0 }),
-  slide('x', 4.8, 6.6, 8.7), win('z', 9.0, 0.8, 2.9, 0.9, 2.0), win('x', 0, 7.5, 8.6, 0.9, 2.0), win('x', 6.2, 3.7, 4.9, 1.0, 1.9, { frosted: true }),
+  slide('x', 4.8, 6.6, 8.7), win('z', 9.0, 0.8, 2.9, 0.9, 2.0), win('x', 6.2, 3.7, 4.9, 1.0, 1.9, { frosted: true }),
   win('z', 4.4, 3.0, 3.6, 1.5, 1.9, { frosted: true }),
 ], {
   ceilings: [
@@ -256,6 +271,9 @@ const third = floorDef('3F', '3階', 2.3, [
   stairs: [],
   built: [
     { type: 'toilet', at: [X(3.35), Z(4.85)], facing: 'S' },
+    panel('z', 4.4, 1, 2.95, 3.75, 'stoneDark', 0.16, 0, 1.42),
+    panel('x', 0, 1, 6.4, 8.9, 'woodPanel', 0.16),
+    cove(0, 6.3, 4.8, 9.0, 2.3, [0.08, 0.05, 0.08, 0.08]),
     { type: 'wicRail', rect: R(0.95, 4.45, 2.85, 6.25) },
     { type: 'stairRail', rect: R(4.66, 5.4, 6.2, 5.44) },
     { type: 'aircon', at: [X(0.0) + 0.2, Z(7.0)], facing: 'E', top: 2.27 },
