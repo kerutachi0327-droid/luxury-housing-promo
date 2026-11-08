@@ -50,6 +50,8 @@ header nav{display:flex;gap:4px;position:absolute;left:50%;transform:translateX(
 .tour-progress span{height:100%;display:block;width:0;background:#d8b286;transition:width .4s}
 footer{min-height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;gap:10px;font-size:12px;color:#576a73}
 footer b{color:var(--ink);margin-right:12px;letter-spacing:.12em}
+footer .to-top{color:var(--ink);text-decoration:none;font-weight:600;min-height:40px;display:inline-flex;align-items:center;margin-right:auto;padding-right:16px}
+footer .to-top:hover{text-decoration:underline}
 footer button{font-size:12px;background:transparent;border:0;color:#53656f;min-height:40px;padding:5px 0}
 .loading,.error{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:#f2f5f5cc;font-size:15px;z-index:5;backdrop-filter:blur(3px)}
 .load-box{display:grid;grid-template-columns:auto 1fr;gap:12px 12px;align-items:center;background:#fff;padding:20px 24px;border-radius:10px;box-shadow:0 10px 40px #14222a22;min-width:280px}
@@ -97,6 +99,7 @@ dialog>.primary{width:100%}
   .zoom-controls{left:10px;bottom:12px}.stage-actions{right:10px;bottom:12px}
   .stage-actions button{padding:8px 10px;font-size:12px}
   footer{padding:4px 16px;flex-wrap:wrap;justify-content:center;gap:0 14px;line-height:1.5}
+  footer .to-top{margin-right:0;padding-right:0}
   .scale-bar{bottom:64px;right:12px}
 }
 @media(max-width:480px){

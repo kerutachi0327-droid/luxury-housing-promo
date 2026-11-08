@@ -1,6 +1,15 @@
 # luxury-housing-promo
 
-高円寺 TYPE02 の住まい体験サイト（GitHub Pages で公開）。
+高円寺の住まい体験サイト（GitHub Pages で公開）。
+
+| 公開URL | 内容 | ソース |
+|---|---|---|
+| `/` | タイプ選択（物件トップ） | `top/` |
+| `/type02/` | TYPE02 の3Dビューア | ルートの `index.html`・`src/`・`assets/` |
+| `/type06/` | TYPE06 の3Dビューア | `type06/` |
+
+- 公開範囲は「URLを知っている人だけ」。全ページに `noindex, nofollow` を付け、検索エンジンに載せない。
+- 配置は `.github/workflows/pages.yml` の「Prepare site」で組む。タイプを追加するときはここに `/typeNN/` を足し、`top/index.html` にカードを追加する。
 
 - 3D表示は公式間取り図をトレースした `src/plan.js` から生成します（1px = 11.6mm）。
 - `npm run check` で各部屋の面積を図面の帖数と照合します（CIで自動実行、許容±6%）。
