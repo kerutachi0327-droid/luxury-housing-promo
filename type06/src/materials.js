@@ -2,7 +2,10 @@
 // texture repeat equals 1 / real-world size of the scanned sample.
 import * as THREE from 'three';
 
-const LIB = 'assets/lib/';
+// Where the shared CC0 library lives. The published site serves one copy at
+// /shared/lib/ for every type (pages.yml adds <meta name="asset-lib">), so a
+// visitor who opens several types downloads it once; locally it is assets/lib/.
+export const LIB = (typeof document !== 'undefined' && document.querySelector('meta[name="asset-lib"]')?.content) || 'assets/lib/';
 let manifest = null;
 const loader = new THREE.TextureLoader();
 const cache = new Map();

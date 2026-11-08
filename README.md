@@ -9,6 +9,7 @@
 | `/type06/` | TYPE06 の3Dビューア | `type06/` |
 
 - 公開範囲は「URLを知っている人だけ」。全ページに `noindex, nofollow` を付け、検索エンジンに載せない。
+- CC0素材（`assets/lib`、約15MB）は公開時に `/shared/lib/` へ1つだけ置き、全タイプで共有する（`<meta name="asset-lib">` を公開時に差し込む。ローカルでは `assets/lib/` を読む）。タイプを行き来しても素材は1回しかダウンロードされない。
 - 配置は `.github/workflows/pages.yml` の「Prepare site」で組む。タイプを追加するときはここに `/typeNN/` を足し、`top/index.html` にカードを追加する。
 
 - 3D表示は公式間取り図をトレースした `src/plan.js` から生成します（1px = 11.6mm）。

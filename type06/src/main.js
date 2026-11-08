@@ -9,7 +9,7 @@ import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment
 import { HDRLoader } from 'three/examples/jsm/loaders/HDRLoader.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { FLOORS, LEVEL, EXTERIOR, JO, roomArea } from './plan.js';
-import { materials, loadManifest, getManifest, setAnisotropy, trackProgress } from './materials.js';
+import { materials, loadManifest, getManifest, setAnisotropy, trackProgress, LIB } from './materials.js';
 import { buildHouse, inside, ceilingAt } from './build.js';
 
 const $ = id => document.getElementById(id);
@@ -94,7 +94,7 @@ async function loadModels() {
   if (!man?.models) return out;
   const loader = new GLTFLoader();
   await Promise.all(Object.entries(man.models).map(async ([id, m]) => {
-    try { const buf = await fetchBinary('assets/lib/' + m.file); const g = await loader.parseAsync(buf, 'assets/lib/models/'); out[id] = g.scene; } catch (e) { console.warn('model', id, e); }
+    try { const buf = await fetchBinary(LIB + m.file); const g = await loader.parseAsync(buf, LIB + 'models/'); out[id] = g.scene; } catch (e) { console.warn('model', id, e); }
   }));
   return out;
 }
@@ -102,7 +102,7 @@ async function loadSky() {
   const man = getManifest();
   if (!man?.hdri) return;
   try {
-    const tex = new HDRLoader().createDataTexture(await fetchBinary('assets/lib/' + man.hdri.file));
+    const tex = new HDRLoader().createDataTexture(await fetchBinary(LIB + man.hdri.file));
     tex.mapping = THREE.EquirectangularReflectionMapping;
     skyTex = tex;
     const pmrem = new THREE.PMREMGenerator(renderer);

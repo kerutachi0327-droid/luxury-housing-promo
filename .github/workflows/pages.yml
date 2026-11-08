@@ -47,7 +47,6 @@ jobs:
           cp index.html style.css _site/type02/
           cp -r dist _site/type02/dist
           cp assets/*.png _site/type02/assets/ 2>/dev/null || true
-          if [ -d assets/lib ]; then cp -r assets/lib _site/type02/assets/lib; fi
           if [ -f CREDITS.md ]; then cp CREDITS.md _site/type02/; fi
           # cache-bust the bundle and stylesheet per commit
           sed -i "s#dist/app.js#dist/app.js?v=${GITHUB_SHA::8}#; s#style.css#style.css?v=${GITHUB_SHA::8}#" _site/type02/index.html
@@ -56,9 +55,14 @@ jobs:
           cp type06/index.html style.css _site/type06/
           cp -r type06/dist _site/type06/dist
           cp type06/assets/*.jpg _site/type06/assets/
-          if [ -d assets/lib ]; then cp -r assets/lib _site/type06/assets/lib; fi
           if [ -f CREDITS.md ]; then cp CREDITS.md _site/type06/; fi
           sed -i "s#dist/app.js#dist/app.js?v=${GITHUB_SHA::8}#; s#style.css#style.css?v=${GITHUB_SHA::8}#" _site/type06/index.html
+          # Shared CC0 library (/shared/lib/): one copy for every type, so the
+          # browser cache carries it from one type to the next
+          if [ -d assets/lib ]; then mkdir -p _site/shared && cp -r assets/lib _site/shared/lib; fi
+          for f in _site/type*/index.html; do
+            sed -i 's#<meta charset="utf-8">#<meta charset="utf-8">\n<meta name="asset-lib" content="../shared/lib/">#' "$f"
+          done
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v4
         with:
